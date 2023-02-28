@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {Alert} from 'react-native';
+import {Alert, ToastAndroid} from 'react-native';
 
 export const setAsyncStorageData = async (storeKey: string, value: string) => {
   try {
@@ -17,4 +17,8 @@ export const getAsyncStorageData = async (storeKey: string) => {
 
 export const showAlert = (err: string) => {
   Alert.alert('Notification', err, [{text: 'OK'}]);
+};
+
+export const showAndroidToast = (text: string) => {
+  ToastAndroid.show(text, ToastAndroid.SHORT);
 };

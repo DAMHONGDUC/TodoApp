@@ -1,5 +1,3 @@
-import {AuthContext} from 'constant/values';
-import {useContext} from 'react';
 import {
   View,
   StyleSheet,
@@ -11,36 +9,26 @@ import {
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 import {COLORS} from 'constant/theme';
-import {SignIn} from 'api/authen-api';
-import {setAsyncStorageData, showAlert} from 'helper';
-import {USER_ID} from 'constant/values';
-import {useDispatch} from 'react-redux';
-import {setIsBusy, setUserInfo} from 'redux/slices/auth-slide';
+import {loginAction} from 'redux/slices/auth-slide';
 
 const SignInSchema = Yup.object().shape({
   email: Yup.string().required('Email is required').email(),
   password: Yup.string().required('Password is required'),
 });
 import {useNavigation} from '@react-navigation/native';
+import {useAppDispatch} from 'redux/store';
 
 export default function SignInPage() {
-  const {handleAfterSignIn} = useContext(AuthContext);
   const navigation = useNavigation();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const handleSignIn = async (email: string, password: string) => {
-    dispatch(setIsBusy(true));
-    const userInfo = await SignIn(email, password);
-
-    if (userInfo) {
-      dispatch(setUserInfo(userInfo));
-      await setAsyncStorageData(USER_ID, userInfo.id);
-      handleAfterSignIn();
-    } else {
-      showAlert('Username or Password incorrect !');
-    }
-
-    dispatch(setIsBusy(false));
+    await dispatch(
+      loginAction({
+        username: email,
+        password: password,
+      }),
+    );
   };
 
   return (

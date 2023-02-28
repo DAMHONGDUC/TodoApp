@@ -1,11 +1,11 @@
-import {AuthContext} from 'constant/values';
-import {useContext} from 'react';
 import {View, Text, Button} from 'react-native';
+import {logoutAction} from 'redux/slices/auth-slide';
+import {useAppDispatch} from 'redux/store';
 
 export default function UserDetailScreen() {
-  const {handleAfterSignOut} = useContext(AuthContext);
+  const dispatch = useAppDispatch();
   const handleSignOut = () => {
-    handleAfterSignOut();
+    dispatch(logoutAction());
   };
 
   return (
