@@ -23,10 +23,22 @@ export const showAndroidToast = (text: string) => {
   ToastAndroid.show(text, ToastAndroid.SHORT);
 };
 
-export const changeOpacityRGBA = (color: string, opacity: string) => {
+export const changeOpacityRGBA = (color: string, opacity: number) => {
   let arr = color.split(',');
 
-  arr.splice(3, 1, opacity);
+  arr.splice(3, 1, opacity + ')');
 
-  return arr.join() + ')';
+  return arr.join();
+};
+
+export const getAllTaskDone = (allCategory: object[]) => {
+  const res = allCategory.reduce((total, e) => total + e.done, 0);
+
+  return res || 0;
+};
+
+export const getAllTaskProgress = (allCategory: object[]) => {
+  const res = allCategory.reduce((total, e) => total + e.progress, 0);
+
+  return res || 0;
 };

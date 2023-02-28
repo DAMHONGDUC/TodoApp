@@ -1,44 +1,16 @@
 import {COLORS} from 'constant/theme';
 import {View, Text, StyleSheet} from 'react-native';
 import CategoryCard from 'components/category-card';
-
-const data = [
-  {
-    id: 1,
-    name: 'Personal',
-    color: 'rgba(14,26,239, 1)',
-    done: 7,
-    progress: 10,
-  },
-  {
-    id: 2,
-    name: 'Work',
-    color: 'rgba(235,69,95, 1)',
-    done: 3,
-    progress: 10,
-  },
-  {
-    id: 3,
-    name: 'Health',
-    color: 'rgba(58,152,185, 1)',
-    done: 10,
-    progress: 2,
-  },
-  {
-    id: 4,
-    name: 'Social',
-    color: 'rgba(249,148,23, 1)',
-    done: 6,
-    progress: 10,
-  },
-];
+import {useAppSelector} from 'redux/store';
 
 export default function BodySection(): JSX.Element {
+  const {allCategory} = useAppSelector(state => state.task);
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Daily Progress</Text>
       <View style={styles.body}>
-        {data.map(e => (
+        {allCategory?.map(e => (
           <CategoryCard key={e.id} data={e}></CategoryCard>
         ))}
       </View>

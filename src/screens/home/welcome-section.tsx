@@ -1,8 +1,23 @@
 import {View, Text, StyleSheet} from 'react-native';
 import ProgressBar from 'components/progress-bar';
 import {COLORS} from 'constant/theme';
+import {useAppSelector} from 'redux/store';
+import {getAllTaskDone, getAllTaskProgress} from 'helper';
+import {useEffect, useState} from 'react';
 
 export default function WelcomeSection(): JSX.Element {
+  const {allCategory} = useAppSelector(state => state.task);
+  const [taskDone, setTaskDone] = useState(0);
+  const [allTask, setAllTask] = useState(0);
+
+  useEffect(() => {
+    const done = getAllTaskDone(allCategory ?? []);
+    const progress = getAllTaskProgress(allCategory ?? []);
+
+    setTaskDone(done);
+    setAllTask(done + progress);
+  }, [allCategory]);
+
   return (
     <View style={styles.container}>
       <View style={styles.column}>
@@ -10,8 +25,13 @@ export default function WelcomeSection(): JSX.Element {
         <Text style={[styles.mainText, {fontSize: 20}]}>You almost here</Text>
       </View>
       <View style={styles.column}>
-        <Text style={styles.text}>20 out of 26 task are completed</Text>
-        <ProgressBar completed={(20 / 26) * 100}></ProgressBar>
+        <Text style={styles.text}>
+          {taskDone} out of {allTask} task are completed
+        </Text>
+        <ProgressBar
+          completed={
+            allTask === 0 ? 0 : (taskDone / allTask) * 100
+          }></ProgressBar>
       </View>
     </View>
   );

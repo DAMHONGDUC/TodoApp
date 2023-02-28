@@ -1,8 +1,7 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {COLORS} from 'constant/theme';
 import {StyleSheet, Text, View} from 'react-native';
 import {AnimatedCircularProgress} from 'react-native-circular-progress';
-import CircularProgress from 'react-native-circular-progress-indicator';
 import {changeOpacityRGBA} from 'helper';
 // type Props = {
 //   props: {
@@ -14,7 +13,8 @@ import {changeOpacityRGBA} from 'helper';
 // };
 
 export default function CategoryCard({data}: any) {
-  const percent = Math.round((data.done / (data.done + data.progress)) * 100);
+  const percent =
+    Math.round((data.done / (data.done + data.progress)) * 100) || 0;
   const backgroundCustom = changeOpacityRGBA(data.color, 0.2);
 
   return (
