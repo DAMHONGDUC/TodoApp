@@ -1,19 +1,23 @@
 import {createSlice} from '@reduxjs/toolkit';
 
 const initialState = {
-  uid: null,
+  userInfo: null,
+  isBusy: false,
 };
 
-export const appSlide = createSlice({
+export const authSlide = createSlice({
   name: 'auth',
   initialState: initialState,
   reducers: {
-    setUid: (state, action) => {
-      state.uid = action.payload;
+    setUserInfo: (state, action) => {
+      state.userInfo = action.payload;
+    },
+    setIsBusy: (state, action) => {
+      state.isBusy = action.payload;
     },
   },
 });
 
-export const {setUid} = appSlide.actions;
+export const {setUserInfo, setIsBusy} = authSlide.actions;
 
-export default appSlide.reducer;
+export default authSlide.reducer;

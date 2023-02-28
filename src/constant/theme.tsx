@@ -8,6 +8,7 @@ export const COLORS = {
   pink: '	#fe3c72',
   grey: '#C1C0C9',
   blue: '#537FE7',
+  blueOcean: '#0081C9',
 
   tabBarColor: '#EEEEEE',
 };

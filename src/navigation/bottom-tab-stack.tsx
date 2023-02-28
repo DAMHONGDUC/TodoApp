@@ -23,9 +23,9 @@ export default function BottomTabStack() {
         component={HomeScreen}
         options={{
           headerShown: false,
-          tabBarLabel: 'User',
+          tabBarLabel: 'Home',
           tabBarIcon: ({color, size}) => (
-            <FontAwesome name={'user'} color={color} size={size - 2} />
+            <FontAwesome name={'home'} color={color} size={size - 2} />
           ),
           tabBarActiveTintColor: COLORS.primary,
         }}

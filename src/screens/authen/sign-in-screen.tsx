@@ -11,6 +11,11 @@ import {
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 import {COLORS} from 'constant/theme';
+import {SignIn} from 'api/authen-api';
+import {setAsyncStorageData, showAlert} from 'helper';
+import {USER_ID} from 'constant/values';
+import {useDispatch} from 'react-redux';
+import {setIsBusy, setUserInfo} from 'redux/slices/auth-slide';
 
 const SignInSchema = Yup.object().shape({
   email: Yup.string().required('Email is required').email(),
@@ -21,15 +26,26 @@ import {useNavigation} from '@react-navigation/native';
 export default function SignInPage() {
   const {handleAfterSignIn} = useContext(AuthContext);
   const navigation = useNavigation();
+  const dispatch = useDispatch();
 
-  const handleSignIn = (email: string, password: string) => {
-    console.log(email, password);
-    handleAfterSignIn();
+  const handleSignIn = async (email: string, password: string) => {
+    dispatch(setIsBusy(true));
+    const userInfo = await SignIn(email, password);
+
+    if (userInfo) {
+      dispatch(setUserInfo(userInfo));
+      await setAsyncStorageData(USER_ID, userInfo.id);
+      handleAfterSignIn();
+    } else {
+      showAlert('Username or Password incorrect !');
+    }
+
+    dispatch(setIsBusy(false));
   };
 
   return (
     <View style={styles.container}>
-      <StatusBar backgroundColor={COLORS.primary} barStyle="light-content" />
+      <StatusBar backgroundColor={COLORS.blueOcean} barStyle="light-content" />
 
       <View style={styles.header}>
         <Text style={styles.title}>Sign in Now!</Text>
@@ -52,14 +68,12 @@ export default function SignInPage() {
           }) => (
             <View style={styles.inputContainer}>
               <TextInput
-                //placeholder="Email or Phone Number"
                 placeholder="Email"
                 placeholderTextColor={COLORS.grey}
                 style={styles.textInput}
-                onChangeText={handleChange('email_or_phone')}
-                onBlur={() => setFieldTouched('email_or_phone')}
+                onChangeText={handleChange('email')}
+                onBlur={() => setFieldTouched('email')}
                 value={values.email}
-                // keyboardType="email-address"
               />
               {touched.email && errors.email && (
                 <Text style={styles.validationText}>{errors.email}</Text>
@@ -106,7 +120,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-end',
     paddingHorizontal: 20,
-    paddingBottom: 50,
+    paddingBottom: 40,
   },
   footer: {
     flex: 4,
@@ -119,14 +133,16 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    //backgroundColor: '#0081C9',
-    backgroundColor: COLORS.primary,
+    backgroundColor: COLORS.blueOcean,
   },
   title: {
     fontWeight: '600',
     fontSize: 30,
     color: COLORS.white,
-    marginBottom: 50,
+    // marginBottom: 50,
+    position: 'absolute',
+    top: 35,
+    left: 20,
   },
   textLink: {
     color: '#000000',

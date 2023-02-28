@@ -5,11 +5,14 @@ import MainStack from './main-stack';
 import AuthenStack from './authen-stack';
 import {AuthContext, USER_ID} from 'constant/values';
 import {setAsyncStorageData, getAsyncStorageData} from 'helper';
+import {useSelector} from 'react-redux';
+import LoadingComponent from 'components/loading-component';
 
 const RootStack = createNativeStackNavigator();
 
 export default function RootNavigation(): JSX.Element {
   const [isSignedIn, setisSignedIn] = useState(false);
+  const {isBusy} = useSelector(state => state.auth);
 
   useEffect(() => {
     const setUpAsyncStorageData = async () => {
@@ -32,6 +35,10 @@ export default function RootNavigation(): JSX.Element {
 
     await setAsyncStorageData(USER_ID, '');
   };
+
+  if (isBusy) {
+    return <LoadingComponent></LoadingComponent>;
+  }
 
   return (
     <AuthContext.Provider
