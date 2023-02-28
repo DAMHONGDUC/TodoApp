@@ -12,4 +12,5 @@ export const COLORS = {
   blueOcean: '#0081C9',
 
   tabBarColor: '#EEEEEE',
+  selectedColor: '#E0E0E0',
 };

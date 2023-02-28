@@ -1,4 +1,4 @@
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, Image} from 'react-native';
 import ProgressBar from 'components/progress-bar';
 import {COLORS} from 'constant/theme';
 import {useAppSelector} from 'redux/store';
@@ -33,6 +33,7 @@ export default function WelcomeSection(): JSX.Element {
             allTask === 0 ? 0 : (taskDone / allTask) * 100
           }></ProgressBar>
       </View>
+      <Image style={styles.image} source={require('assets/rocket.png')}></Image>
     </View>
   );
 }
@@ -42,7 +43,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     width: '100%',
     height: 200,
-    backgroundColor: 'rgba(236,195,165, 0.5)',
+    backgroundColor: 'rgba(236,195,165, 0.4)',
     padding: 20,
     borderRadius: 10,
     justifyContent: 'space-between',
@@ -55,11 +56,12 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   image: {
-    height: 50,
-    width: 50,
+    height: 120,
+    width: 120,
     position: 'absolute',
     right: 0,
     borderRadius: 25,
+    bottom: 40,
   },
   text: {
     color: COLORS.black,

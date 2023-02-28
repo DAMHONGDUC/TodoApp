@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {COLORS} from 'constant/theme';
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, View, TouchableHighlight} from 'react-native';
 import {AnimatedCircularProgress} from 'react-native-circular-progress';
 import {changeOpacityRGBA} from 'helper';
 // type Props = {
@@ -18,45 +18,50 @@ export default function CategoryCard({data}: any) {
   const backgroundCustom = changeOpacityRGBA(data.color, 0.2);
 
   return (
-    <View style={[styles.container]}>
-      <AnimatedCircularProgress
-        size={40}
-        width={4}
-        fill={percent}
-        tintColor={data.color}
-        backgroundColor={COLORS.grey}
-        children={() => <Text style={styles.percentText}>{percent}%</Text>}
-      />
-      <View style={[styles.circle, {backgroundColor: data.color}]}></View>
-      <Text style={styles.mainText}>{data.name}</Text>
-      <Text style={styles.text}>{data.done + data.progress} tasks</Text>
-      <View style={styles.row}>
-        <View
-          style={[
-            styles.statusContainer,
-            {backgroundColor: backgroundCustom, marginRight: 10},
-          ]}>
-          <Text style={[styles.statusText, {color: data.color}]}>
-            {data.done} completed
-          </Text>
-        </View>
-        <View
-          style={[
-            styles.statusContainer,
-            {backgroundColor: 'rgba(235,69,95, 0.2)'},
-          ]}>
-          <Text style={[styles.statusText, {color: COLORS.primary}]}>
-            {data.progress} left
-          </Text>
+    <TouchableHighlight
+      onPress={() => console.log(' go to task detail screen')}
+      underlayColor={COLORS.selectedColor}
+      style={[styles.container]}>
+      <View>
+        <AnimatedCircularProgress
+          size={40}
+          width={4}
+          fill={percent}
+          tintColor={data.color}
+          backgroundColor={COLORS.grey}
+          children={() => <Text style={styles.percentText}>{percent}%</Text>}
+        />
+        <View style={[styles.circle, {backgroundColor: data.color}]}></View>
+        <Text style={styles.mainText}>{data.name}</Text>
+        <Text style={styles.text}>{data.done + data.progress} tasks</Text>
+        <View style={styles.row}>
+          <View
+            style={[
+              styles.statusContainer,
+              {backgroundColor: backgroundCustom, marginRight: 10},
+            ]}>
+            <Text style={[styles.statusText, {color: data.color}]}>
+              {data.done} completed
+            </Text>
+          </View>
+          <View
+            style={[
+              styles.statusContainer,
+              {backgroundColor: 'rgba(235,69,95, 0.2)'},
+            ]}>
+            <Text style={[styles.statusText, {color: COLORS.primary}]}>
+              {data.progress} left
+            </Text>
+          </View>
         </View>
       </View>
-    </View>
+    </TouchableHighlight>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'rgba(211,206,223, 0.5)',
+    backgroundColor: 'rgba(211,206,223, 0.3)',
     height: 140,
     width: 140,
     marginTop: 10,
