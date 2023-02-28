@@ -2,7 +2,7 @@ import {COLORS} from 'constant/theme';
 import React from 'react';
 import {ActivityIndicator, StyleSheet, View} from 'react-native';
 
-const LoadingComponent = () => (
+const LoadingComponent = (): JSX.Element => (
   <View style={[styles.container, styles.horizontal]}>
     <ActivityIndicator size="large" color={COLORS.primary} />
   </View>

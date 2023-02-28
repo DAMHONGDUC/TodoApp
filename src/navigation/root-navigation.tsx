@@ -50,7 +50,5 @@ export default function RootNavigation(): JSX.Element {
         </>
       </RootStack.Navigator>
     </NavigationContainer>
-
-    // </AuthContext.Provider>
   );
 }
