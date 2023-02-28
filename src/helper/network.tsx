@@ -1,11 +1,12 @@
 import axios from 'axios';
 import {showAlert} from 'helper';
+import Config from 'react-native-config';
 
-const BASE_URL = 'https://63fd6b32859df29986cebd74.mockapi.io/api/v1';
+const BASE_URL1 = Config.BASE_URL1;
 
 export const getAPI = async (endpoint: string) => {
   try {
-    const res = await axios.get(BASE_URL + endpoint);
+    const res = await axios.get(BASE_URL1 + endpoint);
 
     return res;
   } catch (err) {
