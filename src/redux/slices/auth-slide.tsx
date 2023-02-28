@@ -23,6 +23,8 @@ export const loginAction = createAsyncThunk(
       password: input.password,
     });
 
+    await setAsyncStorageData(USER_ID, userInfo?.id ?? '');
+
     return userInfo;
   },
 );

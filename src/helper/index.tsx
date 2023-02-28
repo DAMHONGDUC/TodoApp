@@ -22,3 +22,11 @@ export const showAlert = (err: string) => {
 export const showAndroidToast = (text: string) => {
   ToastAndroid.show(text, ToastAndroid.SHORT);
 };
+
+export const changeOpacityRGBA = (color: string, opacity: string) => {
+  let arr = color.split(',');
+
+  arr.splice(3, 1, opacity);
+
+  return arr.join() + ')';
+};

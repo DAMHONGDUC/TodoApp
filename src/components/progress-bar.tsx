@@ -12,7 +12,7 @@ export default function ProgressBar({completed}: Props): JSX.Element {
       <View
         style={[
           styles.conatiner,
-          {backgroundColor: COLORS.secondary, width: `${completed}%`},
+          {backgroundColor: COLORS.blueOcean, width: `${completed}%`},
         ]}></View>
     </View>
   );

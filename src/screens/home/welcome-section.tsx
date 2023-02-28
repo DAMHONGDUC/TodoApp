@@ -22,17 +22,16 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     width: '100%',
     height: 200,
-    backgroundColor: '#ECC3A5',
+    backgroundColor: 'rgba(236,195,165, 0.5)',
     padding: 20,
     borderRadius: 10,
     justifyContent: 'space-between',
-    marginTop: 20,
   },
   column: {
     flexDirection: 'column',
   },
   mainText: {
-    color: COLORS.secondary,
+    color: COLORS.blueOcean,
     fontWeight: '500',
   },
   image: {

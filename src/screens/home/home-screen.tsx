@@ -20,6 +20,6 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.white,
     flexDirection: 'column',
     padding: 20,
-    // justifyContent: 'space-between',
+    justifyContent: 'space-between',
   },
 });

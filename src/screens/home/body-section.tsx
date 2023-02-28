@@ -7,25 +7,33 @@ const data = [
     id: 1,
     name: 'Personal',
     tasks: [1, 2],
-    color: '#0E1AEF',
+    color: 'rgba(14,26,239, 1)',
+    done: 7,
+    progress: 10,
   },
   {
     id: 2,
     name: 'Work',
     tasks: [3, 4],
-    color: COLORS.primary,
+    color: 'rgba(235,69,95, 1)',
+    done: 3,
+    progress: 10,
   },
   {
     id: 3,
-    name: 'Personal',
+    name: 'Health',
     tasks: [1, 2],
-    color: '#0E1AEF',
+    color: 'rgba(58,152,185, 1)',
+    done: 10,
+    progress: 2,
   },
   {
     id: 4,
-    name: 'Work',
+    name: 'Social',
     tasks: [3, 4],
-    color: COLORS.primary,
+    color: 'rgba(249,148,23, 1)',
+    done: 6,
+    progress: 10,
   },
 ];
 
@@ -46,7 +54,7 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'column',
     backgroundColor: COLORS.white,
-    marginTop: 20,
+    height: 400,
   },
   title: {
     color: COLORS.black,
@@ -58,5 +66,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-around',
+    marginTop: 20,
   },
 });
