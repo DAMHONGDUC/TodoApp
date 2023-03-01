@@ -1,5 +1,12 @@
 import {useRoute, useNavigation} from '@react-navigation/native';
-import {View, Text, StyleSheet, TouchableOpacity, FlatList} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  FlatList,
+  StatusBar,
+} from 'react-native';
 import {
   TaskDetailScreenRouteProp,
   MainStackNavigationProp,
@@ -58,6 +65,7 @@ export default function TaskDetailScreen(): JSX.Element {
 
   return (
     <View style={styles.container}>
+      <StatusBar backgroundColor={COLORS.white} barStyle="light-content" />
       <View style={styles.header}>
         <TouchableOpacity onPress={handleBackButton}>
           <Ionicons name="arrow-back" color={COLORS.black} size={25} />

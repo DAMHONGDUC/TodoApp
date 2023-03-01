@@ -37,7 +37,8 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'column',
     backgroundColor: COLORS.white,
-    height: 400,
+    height: 360,
+    marginTop: 20,
   },
   title: {
     color: COLORS.black,
@@ -49,6 +50,5 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-around',
-    marginTop: 20,
   },
 });

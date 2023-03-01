@@ -5,6 +5,8 @@ import {View, Text, StyleSheet, TouchableHighlight} from 'react-native';
 import {ITask} from 'services/task/task-model';
 import {converTimeStampToDateTime} from 'helper';
 import CheckBox from '@react-native-community/checkbox';
+import {useAppDispatch} from 'redux/store';
+import {changeTaskStatusAction} from 'redux/slices/task-slice';
 
 type Props = {
   data: ITask;
@@ -14,6 +16,7 @@ export default function TaskRow({data}: Props) {
   const [color, setColor] = useState('');
   const [borderColor, setBorderColor] = useState('');
   const [toggleCheckBox, setToggleCheckBox] = useState(false);
+  const dispacth = useAppDispatch();
 
   useEffect(() => {
     setColor(
@@ -32,34 +35,42 @@ export default function TaskRow({data}: Props) {
 
   const onChangeTaskStatus = (newValue: boolean) => {
     setToggleCheckBox(newValue);
+
+    dispacth(
+      changeTaskStatusAction({
+        status: newValue ? 'Done' : 'Progress',
+        id: data.id,
+      }),
+    );
   };
 
   return (
-    <TouchableHighlight
-      onPress={() => console.log("go to task's screen")}
-      underlayColor={COLORS.white}
-      style={styles.container1}>
-      <View
-        style={[
-          styles.container2,
-          {
-            backgroundColor: color,
-            borderColor: borderColor,
-          },
-        ]}>
-        <View style={styles.checkBox}>
-          <CheckBox
-            value={toggleCheckBox}
-            onValueChange={newValue => onChangeTaskStatus(newValue)}></CheckBox>
+    <View>
+      <TouchableHighlight
+        onPress={() => console.log("go to task's screen")}
+        underlayColor={COLORS.white}
+        style={styles.container1}>
+        <View
+          style={[
+            styles.container2,
+            {
+              backgroundColor: color,
+              borderColor: borderColor,
+            },
+          ]}>
+          <Text style={styles.name}>{data.name}</Text>
+          <Text style={styles.description}>{data.description}</Text>
+          <Text style={styles.time}>
+            {converTimeStampToDateTime(data.createdAt)}
+          </Text>
         </View>
-
-        <Text style={styles.name}>{data.name}</Text>
-        <Text style={styles.description}>{data.description}</Text>
-        <Text style={styles.time}>
-          {converTimeStampToDateTime(data.createdAt)}
-        </Text>
+      </TouchableHighlight>
+      <View style={styles.checkBox}>
+        <CheckBox
+          value={toggleCheckBox}
+          onValueChange={newValue => onChangeTaskStatus(newValue)}></CheckBox>
       </View>
-    </TouchableHighlight>
+    </View>
   );
 }
 
@@ -88,5 +99,9 @@ const styles = StyleSheet.create({
     color: COLORS.black,
     fontSize: 14,
   },
-  checkBox: {position: 'absolute', right: 10, top: 30},
+  checkBox: {
+    position: 'absolute',
+    right: 10,
+    top: 40,
+  },
 });

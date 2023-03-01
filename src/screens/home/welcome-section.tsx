@@ -47,6 +47,7 @@ const styles = StyleSheet.create({
     padding: 20,
     borderRadius: 10,
     justifyContent: 'space-between',
+    marginTop: 20,
   },
   column: {
     flexDirection: 'column',

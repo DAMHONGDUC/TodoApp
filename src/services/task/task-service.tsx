@@ -1,4 +1,4 @@
-import {getAPI2} from 'helper/network';
+import {getAPI2, putAPI2} from 'helper/network';
 import {ITask, ITaskRequest} from './task-model';
 
 const endpoint = {
@@ -19,5 +19,12 @@ export const TaskService = {
     }
 
     return result;
+  },
+  changeTaskStatus: async (input: ITaskRequest) => {
+    const res = await putAPI2(endpoint.allTasks + input.id, {
+      status: input.status,
+    });
+
+    return res;
   },
 };

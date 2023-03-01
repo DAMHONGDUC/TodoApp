@@ -24,3 +24,13 @@ export const getAPI2 = async (endpoint: string) => {
     showAlert(`Something wrong, ${err}`);
   }
 };
+
+export const putAPI2 = async (endpoint: string, body: object) => {
+  try {
+    const res = await axios.put(BASE_URL2 + endpoint, body);
+
+    return res?.status === 200;
+  } catch (err) {
+    showAlert(`Something wrong, ${err}`);
+  }
+};

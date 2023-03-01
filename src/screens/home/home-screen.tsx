@@ -1,4 +1,4 @@
-import {View, StyleSheet} from 'react-native';
+import {View, StyleSheet, StatusBar} from 'react-native';
 import HeaderSection from './header-section';
 import WelcomeSection from './welcome-section';
 import BodySection from './body-section';
@@ -22,6 +22,7 @@ export default function HomeScreen(): JSX.Element {
 
   return (
     <View style={styles.container}>
+      <StatusBar backgroundColor={COLORS.white} barStyle="light-content" />
       {isLoading ? (
         <LoadingComponent></LoadingComponent>
       ) : (

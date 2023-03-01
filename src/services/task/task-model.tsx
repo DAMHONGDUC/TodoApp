@@ -1,5 +1,7 @@
 export interface ITaskRequest {
-  categoryId: string;
+  categoryId?: string;
+  status?: string;
+  id?: number;
 }
 
 export interface ITask {

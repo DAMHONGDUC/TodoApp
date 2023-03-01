@@ -6,17 +6,28 @@ import {ITask, ITaskRequest} from 'services/task/task-model';
 interface ITaskStore {
   tasks: ITask[];
   isLoading: boolean;
+  // needReload: boolean;
 }
 
 const initialState: ITaskStore = {
   tasks: [],
   isLoading: false,
+  // needReload: false,
 };
 
 export const getTaskByCategoryIdAction = createAsyncThunk(
   'task/getTaskByCategoryId',
   async (input: ITaskRequest, _thunkApi) => {
     const res = await TaskService.getTaskByCategoryId(input);
+
+    return res;
+  },
+);
+
+export const changeTaskStatusAction = createAsyncThunk(
+  'task/changeTaskStatus',
+  async (input: ITaskRequest, _thunkApi) => {
+    const res = await TaskService.changeTaskStatus(input);
 
     return res;
   },
@@ -41,6 +52,16 @@ export const categorySlide = createSlice({
     });
     builder.addCase(getTaskByCategoryIdAction.pending, state => {
       state.isLoading = true;
+    });
+
+    builder.addCase(changeTaskStatusAction.fulfilled, (state, action) => {
+      if (action.payload) showAndroidToast('Update status successfully');
+    });
+    builder.addCase(changeTaskStatusAction.rejected, (state, action) => {
+      showAndroidToast(action.error?.message ?? 'Something Wrong, try later !');
+    });
+    builder.addCase(changeTaskStatusAction.pending, state => {
+      showAndroidToast('Update status fail');
     });
   },
 });
