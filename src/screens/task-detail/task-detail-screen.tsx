@@ -6,70 +6,13 @@ import {
 } from 'navigation/types';
 import {COLORS} from 'constant/theme';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {converTimeStampToDateTime} from 'helper';
 import TaskRow from 'components/task-row';
 import {ITask} from 'services/task/task-model';
 import SelectDropdown from 'react-native-select-dropdown';
 import {useEffect, useState} from 'react';
-
-const data = [
-  {
-    id: 1,
-    category: 1,
-    name: 'task 1',
-    description: 'playing game 1',
-    createdAt: 1677652762470,
-    status: 'Progress',
-  },
-  {
-    id: 2,
-    category: 1,
-    name: 'task 2',
-    description: 'playing game 2',
-    createdAt: 1677652762470,
-    status: 'Progress',
-  },
-  {
-    id: 3,
-    category: 1,
-    name: 'task 3',
-    description: 'playing game 3',
-    createdAt: 1677652762470,
-    status: 'Progress',
-  },
-  {
-    id: 4,
-    category: 1,
-    name: 'task 4',
-    description: 'playing game 4',
-    createdAt: 1677652762470,
-    status: 'Done',
-  },
-  {
-    id: 5,
-    category: 1,
-    name: 'task 5',
-    description: 'playing game 5',
-    createdAt: 1677652762470,
-    status: 'Progress',
-  },
-  {
-    id: 6,
-    category: 1,
-    name: 'task 6',
-    description: 'playing game 6',
-    createdAt: 1677652762470,
-    status: 'Progress',
-  },
-  {
-    id: 7,
-    category: 1,
-    name: 'task 7',
-    description: 'playing game 7',
-    createdAt: 1677652762470,
-    status: 'Done',
-  },
-];
+import {useAppDispatch, useAppSelector} from 'redux/store';
+import {getTaskByCategoryIdAction} from 'redux/slices/task-slice';
+import LoadingComponent from 'components/loading-component';
 
 const options: string[] = ['Done', 'Progress', 'All'];
 const defaultOption = 2;
@@ -85,19 +28,29 @@ export default function TaskDetailScreen(): JSX.Element {
   const navigation = useNavigation<MainStackNavigationProp>();
   const [option, setOption] = useState(defaultOption);
   const [showingData, setShowingData] = useState([]);
+  const dispatch = useAppDispatch();
+  const {tasks, isLoading} = useAppSelector(state => state.task);
 
   const handleBackButton = () => {
     navigation.pop();
   };
 
   useEffect(() => {
-    data &&
+    const fetchAllCategory = async () => {
+      await dispatch(getTaskByCategoryIdAction({categoryId: categoryId}));
+    };
+
+    fetchAllCategory();
+  }, [dispatch, categoryId]);
+
+  useEffect(() => {
+    tasks &&
       setShowingData(
         option === defaultOption
-          ? data
-          : data.filter(e => e.status === options[option]),
+          ? tasks
+          : tasks.filter(e => e.status === options[option]),
       );
-  }, [option, data]);
+  }, [option, tasks]);
 
   const renderItem = ({item}: Props) => {
     return <TaskRow data={item}></TaskRow>;
@@ -125,13 +78,17 @@ export default function TaskDetailScreen(): JSX.Element {
           buttonTextStyle={styles.buttonTextStyle}
         />
       </View>
-      <FlatList
-        data={showingData}
-        renderItem={renderItem}
-        keyExtractor={item => item.id}
-        ListEmptyComponent={
-          <Text style={styles.notiText}>{'You have no task'}</Text>
-        }></FlatList>
+      {isLoading ? (
+        <LoadingComponent />
+      ) : (
+        <FlatList
+          data={showingData}
+          renderItem={renderItem}
+          keyExtractor={item => item.id.toString()}
+          ListEmptyComponent={
+            <Text style={styles.notiText}>{'You have no task'}</Text>
+          }></FlatList>
+      )}
     </View>
   );
 }

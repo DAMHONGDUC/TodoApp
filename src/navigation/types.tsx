@@ -12,7 +12,7 @@ export type RootStackNavigatorParamList = {
 
 export type MainStackNavigatorParamList = {
   BottomTabStack: BottomTabNavigatorParamList;
-  TaskDetailScreen: {categoryId: number; categoryName: string};
+  TaskDetailScreen: {categoryId: string; categoryName: string};
 };
 
 export type AuthenStackNavigatorParamList = {

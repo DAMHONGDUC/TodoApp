@@ -9,7 +9,7 @@ export default function BodySection(): JSX.Element {
   const {allCategory} = useAppSelector(state => state.category);
   const navigation = useNavigation<MainStackNavigationProp>();
 
-  const navToTaskDetail = (categoryId: number, categoryName: string) => {
+  const navToTaskDetail = (categoryId: string, categoryName: string) => {
     navigation.navigate('TaskDetailScreen', {
       categoryId: categoryId,
       categoryName: categoryName,
@@ -24,7 +24,9 @@ export default function BodySection(): JSX.Element {
           <CategoryCard
             key={e.id}
             data={e}
-            onPress={() => navToTaskDetail(e.id, e.name)}></CategoryCard>
+            onPress={() =>
+              navToTaskDetail(e.id.toString(), e.name)
+            }></CategoryCard>
         ))}
       </View>
     </View>
