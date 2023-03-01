@@ -4,13 +4,13 @@ import CategoryCard from 'components/category-card';
 import {useAppSelector} from 'redux/store';
 
 export default function BodySection(): JSX.Element {
-  const {allCategory} = useAppSelector(state => state.task);
+  const {allCategory} = useAppSelector(state => state.category);
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Daily Progress</Text>
       <View style={styles.body}>
-        {allCategory?.map(e => (
+        {allCategory.map(e => (
           <CategoryCard key={e.id} data={e}></CategoryCard>
         ))}
       </View>

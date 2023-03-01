@@ -9,7 +9,7 @@ import {
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 import {COLORS} from 'constant/theme';
-import {loginAction} from 'redux/slices/auth-slide';
+import {loginAction} from 'redux/slices/auth-slice';
 
 const SignInSchema = Yup.object().shape({
   email: Yup.string().required('Email is required').email(),

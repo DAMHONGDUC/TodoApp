@@ -1,13 +1,11 @@
-import {getAPI} from 'helper/network';
+export interface ICategoryRequest {
+  id?: string;
+}
 
-const endpoint = {
-  allCategory: '/categorys'.trim(),
-};
-
-export const CategoryService = {
-  getAllCategory: async () => {
-    const res = await getAPI(endpoint.allCategory);
-
-    return res?.data ?? [];
-  },
-};
+export interface ICategory {
+  id: number;
+  name: string;
+  color: string;
+  done: number;
+  progress: number;
+}

@@ -1,5 +1,5 @@
 import {View, Text, Button} from 'react-native';
-import {logoutAction} from 'redux/slices/auth-slide';
+import {logoutAction} from 'redux/slices/auth-slice';
 import {useAppDispatch} from 'redux/store';
 
 export default function UserDetailScreen() {

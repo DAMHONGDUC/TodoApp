@@ -6,13 +6,13 @@ import {getAllTaskDone, getAllTaskProgress} from 'helper';
 import {useEffect, useState} from 'react';
 
 export default function WelcomeSection(): JSX.Element {
-  const {allCategory} = useAppSelector(state => state.task);
+  const {allCategory} = useAppSelector(state => state.category);
   const [taskDone, setTaskDone] = useState(0);
   const [allTask, setAllTask] = useState(0);
 
   useEffect(() => {
-    const done = getAllTaskDone(allCategory ?? []);
-    const progress = getAllTaskProgress(allCategory ?? []);
+    const done = getAllTaskDone(allCategory);
+    const progress = getAllTaskProgress(allCategory);
 
     setTaskDone(done);
     setAllTask(done + progress);

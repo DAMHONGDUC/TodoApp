@@ -4,13 +4,19 @@ import {USER_ID} from 'constant/values';
 import {ILoginRequest} from 'services/auth/auth-model';
 import {AuthService} from 'services/auth/auth-service';
 interface IAuthStore {
-  userInfo: object | undefined;
+  userInfo: {
+    email?: string;
+    password?: string;
+    firstname?: string;
+    lastname?: string;
+    id?: string;
+  };
   isAuthLoading: boolean;
   isLogged: boolean;
 }
 
 const initialState: IAuthStore = {
-  userInfo: undefined,
+  userInfo: {},
   isAuthLoading: false,
   isLogged: false,
 };
@@ -65,7 +71,7 @@ export const authSlide = createSlice({
     });
     builder.addCase(logoutAction.fulfilled, state => {
       state.isLogged = false;
-      state.userInfo = undefined;
+      state.userInfo = {};
     });
   },
 });

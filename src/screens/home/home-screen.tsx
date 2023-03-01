@@ -5,12 +5,12 @@ import BodySection from './body-section';
 import {COLORS} from 'constant/theme';
 import {useEffect} from 'react';
 import {useAppDispatch, useAppSelector} from 'redux/store';
-import {getAllCategoryAction} from 'redux/slices/task-slide';
+import {getAllCategoryAction} from 'redux/slices/category-slice';
 import LoadingComponent from 'components/loading-component';
 
 export default function HomeScreen(): JSX.Element {
   const dispatch = useAppDispatch();
-  const {allCategory} = useAppSelector(state => state.task);
+  const {isLoading} = useAppSelector(state => state.category);
 
   useEffect(() => {
     const fetchAllCategory = async () => {
@@ -22,14 +22,14 @@ export default function HomeScreen(): JSX.Element {
 
   return (
     <View style={styles.container}>
-      {allCategory ? (
+      {isLoading ? (
+        <LoadingComponent></LoadingComponent>
+      ) : (
         <>
           <HeaderSection></HeaderSection>
           <WelcomeSection></WelcomeSection>
           <BodySection></BodySection>
         </>
-      ) : (
-        <LoadingComponent></LoadingComponent>
       )}
     </View>
   );

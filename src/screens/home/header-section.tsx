@@ -7,7 +7,7 @@ export default function HeaderSection(): JSX.Element {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.mainText}>Hey, {userInfo?.firstname ?? ''}</Text>
+      <Text style={styles.mainText}>Hey, {userInfo.firstname ?? ''}</Text>
       <Text style={styles.subtext}>Let's make this day productive</Text>
       <Image
         style={styles.image}

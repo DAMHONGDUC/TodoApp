@@ -8,7 +8,7 @@ import {getAsyncStorageData} from 'helper';
 import {useAppSelector} from 'redux/store';
 import LoadingComponent from 'components/loading-component';
 import {useDispatch} from 'react-redux';
-import {setIsLogged} from 'redux/slices/auth-slide';
+import {setIsLogged} from 'redux/slices/auth-slice';
 
 const RootStack = createNativeStackNavigator();
 
