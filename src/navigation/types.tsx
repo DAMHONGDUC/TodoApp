@@ -12,7 +12,13 @@ export type RootStackNavigatorParamList = {
 
 export type MainStackNavigatorParamList = {
   BottomTabStack: BottomTabNavigatorParamList;
-  TaskDetailScreen: {categoryId: string; categoryName: string};
+  ListTasksScreen: {categoryId: string; categoryName: string};
+  TaskDetailScreen: {
+    id: string;
+    name: string;
+    description: string;
+    status: string;
+  };
 };
 
 export type AuthenStackNavigatorParamList = {
@@ -26,11 +32,21 @@ export type BottomTabNavigatorParamList = {
 };
 
 export type MainStackNavigationProp = CompositeNavigationProp<
-  NativeStackNavigationProp<MainStackNavigatorParamList, 'TaskDetailScreen'>,
+  NativeStackNavigationProp<MainStackNavigatorParamList, 'ListTasksScreen'>,
   BottomTabNavigationProp<BottomTabNavigatorParamList, 'HomeScreen'>
 >;
 
+export type ListTaskNavigationProp = CompositeNavigationProp<
+  NativeStackNavigationProp<MainStackNavigatorParamList, 'ListTasksScreen'>,
+  NativeStackNavigationProp<MainStackNavigatorParamList, 'TaskDetailScreen'>
+>;
+
 export type TaskDetailScreenRouteProp = RouteProp<
+  MainStackNavigatorParamList,
+  'ListTasksScreen'
+>;
+
+export type ListTaskRouteProp = RouteProp<
   MainStackNavigatorParamList,
   'TaskDetailScreen'
 >;

@@ -10,7 +10,7 @@ export default function BodySection(): JSX.Element {
   const navigation = useNavigation<MainStackNavigationProp>();
 
   const navToTaskDetail = (categoryId: string, categoryName: string) => {
-    navigation.navigate('TaskDetailScreen', {
+    navigation.navigate('ListTasksScreen', {
       categoryId: categoryId,
       categoryName: categoryName,
     });

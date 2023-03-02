@@ -82,7 +82,6 @@ export const categorySlide = createSlice({
 
     builder.addCase(deleteTaskAction.fulfilled, (state, action) => {
       const res = action.payload;
-      console.log(res);
 
       if (res.success) {
         showAndroidToast('delete task successfully');

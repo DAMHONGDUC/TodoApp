@@ -7,6 +7,8 @@ import {converTimeStampToDateTime} from 'helper';
 import CheckBox from '@react-native-community/checkbox';
 import {useAppDispatch} from 'redux/store';
 import {changeTaskStatusAction} from 'redux/slices/task-slice';
+import {ListTaskNavigationProp} from 'navigation/types';
+import {useNavigation} from '@react-navigation/native';
 
 type Props = {
   data: ITask;
@@ -17,6 +19,7 @@ export default function TaskRow({data}: Props) {
   const [borderColor, setBorderColor] = useState('');
   const [toggleCheckBox, setToggleCheckBox] = useState(false);
   const dispacth = useAppDispatch();
+  const navigation = useNavigation<ListTaskNavigationProp>();
 
   useEffect(() => {
     setColor(
@@ -44,10 +47,19 @@ export default function TaskRow({data}: Props) {
     );
   };
 
+  const navToTaskDetail = () => {
+    navigation.navigate('TaskDetailScreen', {
+      id: data.id,
+      name: data.name,
+      description: data.description,
+      status: data.status,
+    });
+  };
+
   return (
     <View>
       <TouchableHighlight
-        onPress={() => console.log("go to task's screen")}
+        onPress={navToTaskDetail}
         underlayColor={COLORS.white}
         style={styles.container1}>
         <View
