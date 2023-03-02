@@ -32,4 +32,14 @@ export const TaskService = {
 
     return res;
   },
+  updateTask: async (input: ITaskRequest) => {
+    const res = await putAPI2(endpoint.allTasks + input.id, {
+      name: input.name,
+      status: input.status,
+      description: input.description,
+      createdAt: input.createdAt,
+    });
+
+    return res;
+  },
 };

@@ -42,6 +42,15 @@ export const deleteTaskAction = createAsyncThunk(
   },
 );
 
+export const updateTaskAction = createAsyncThunk(
+  'task/updateTask',
+  async (input: ITaskRequest, _thunkApi) => {
+    const res = await TaskService.updateTask(input);
+
+    return {success: res, input};
+  },
+);
+
 export const categorySlide = createSlice({
   name: 'category',
   initialState: initialState,
@@ -67,7 +76,7 @@ export const categorySlide = createSlice({
       const res = action.payload;
 
       if (res.success) {
-        showAndroidToast('Update status successfully');
+        showAndroidToast('Change status successfully');
 
         state.tasks.forEach(e => {
           if (e.id === res.input.id) {
@@ -84,12 +93,34 @@ export const categorySlide = createSlice({
       const res = action.payload;
 
       if (res.success) {
-        showAndroidToast('delete task successfully');
+        showAndroidToast('Delete task successfully');
 
         state.tasks = state.tasks.filter(e => e.id !== res.input.id);
       }
     });
     builder.addCase(deleteTaskAction.rejected, (state, action) => {
+      showAndroidToast(action.error?.message ?? 'Something Wrong, try later !');
+    });
+
+    builder.addCase(updateTaskAction.fulfilled, (state, action) => {
+      const res = action.payload;
+
+      console.log(res);
+
+      if (res.success) {
+        state.tasks.forEach(e => {
+          if (e.id === res.input.id) {
+            e.name = res.input.name!;
+            e.description = res.input.description!;
+            e.status = res.input.status!;
+            e.createdAt = res.input.createdAt!;
+          }
+        });
+
+        showAndroidToast('Update task successfully');
+      }
+    });
+    builder.addCase(updateTaskAction.rejected, (state, action) => {
       showAndroidToast(action.error?.message ?? 'Something Wrong, try later !');
     });
   },

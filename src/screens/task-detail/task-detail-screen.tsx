@@ -5,6 +5,7 @@ import {
   StatusBar,
   TouchableOpacity,
   Text,
+  Keyboard,
 } from 'react-native';
 import {useRoute, useNavigation} from '@react-navigation/native';
 import {ListTaskNavigationProp, ListTaskRouteProp} from 'navigation/types';
@@ -14,14 +15,28 @@ import {useEffect, useState} from 'react';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
 import {TASK_DONE, TASK_PROGRESS} from 'constant/values';
 import {converTimeStampToDateTime} from 'helper';
+import {useAppDispatch, useAppSelector} from 'redux/store';
+import {updateTaskAction} from 'redux/slices/task-slice';
 
 export function TaskDetailScreen() {
   const route = useRoute<ListTaskRouteProp>();
-  const {id, name, description, status, createdAt} = route.params;
+  const {id, status} = route.params; // default value
   const navigation = useNavigation<ListTaskNavigationProp>();
-  const [newName, setNewName] = useState(name);
-  const [newDescription, setNewDescription] = useState(description);
-  const [newStatus, setNewStatus] = useState(status);
+  const [newName, setNewName] = useState('');
+  const [newDescription, setNewDescription] = useState('');
+  const [newStatus, setNewStatus] = useState('');
+  const [newCreatedAt, setNewCreatedAt] = useState(0);
+  const dispatch = useAppDispatch();
+  const {tasks} = useAppSelector(state => state.task);
+
+  useEffect(() => {
+    const currTask = tasks.find(e => e.id === id);
+
+    setNewName(currTask?.name ?? '');
+    setNewDescription(currTask?.description ?? '');
+    setNewStatus(currTask?.status ?? '');
+    setNewCreatedAt(currTask?.createdAt ?? 0);
+  }, [tasks, dispatch, id]);
 
   const handleBackButton = () => {
     navigation.pop();
@@ -32,13 +47,17 @@ export function TaskDetailScreen() {
   };
 
   const handleUpdateTask = () => {
-    const newTask = {
-      id: id,
-      name: newName,
-      description: newDescription,
-      status: newStatus,
-      createdAt: new Date().valueOf(),
-    };
+    dispatch(
+      updateTaskAction({
+        id: id,
+        name: newName,
+        description: newDescription,
+        status: newStatus,
+        createdAt: new Date().valueOf(),
+      }),
+    );
+
+    Keyboard.dismiss();
   };
 
   return (
@@ -69,7 +88,7 @@ export function TaskDetailScreen() {
       </View>
 
       <Text style={styles.modify}>
-        Last modified: {converTimeStampToDateTime(createdAt)}
+        Last modified: {converTimeStampToDateTime(newCreatedAt)}
       </Text>
 
       <TextInput
