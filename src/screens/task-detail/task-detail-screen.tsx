@@ -13,7 +13,7 @@ import {
 } from 'navigation/types';
 import {COLORS} from 'constant/theme';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import TaskRow from 'components/task-row';
+import TaskRow from 'screens/task-detail/task-row';
 import {ITask} from 'services/task/task-model';
 import SelectDropdown from 'react-native-select-dropdown';
 import {useEffect, useState} from 'react';

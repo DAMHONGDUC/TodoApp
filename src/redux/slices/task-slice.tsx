@@ -29,7 +29,7 @@ export const changeTaskStatusAction = createAsyncThunk(
   async (input: ITaskRequest, _thunkApi) => {
     const res = await TaskService.changeTaskStatus(input);
 
-    return res;
+    return {success: res, input};
   },
 );
 
@@ -55,13 +55,21 @@ export const categorySlide = createSlice({
     });
 
     builder.addCase(changeTaskStatusAction.fulfilled, (state, action) => {
-      if (action.payload) showAndroidToast('Update status successfully');
+      const res = action.payload;
+
+      if (res.success) {
+        showAndroidToast('Update status successfully');
+
+        state.tasks.forEach(e => {
+          if (e.id === res.input.id) {
+            console.log(e);
+            e.status = res.input.status!;
+          }
+        });
+      }
     });
     builder.addCase(changeTaskStatusAction.rejected, (state, action) => {
       showAndroidToast(action.error?.message ?? 'Something Wrong, try later !');
-    });
-    builder.addCase(changeTaskStatusAction.pending, state => {
-      showAndroidToast('Update status fail');
     });
   },
 });
