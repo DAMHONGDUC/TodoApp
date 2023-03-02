@@ -18,6 +18,7 @@ import {
   TASK_DONE,
   TASK_PROGRESS,
   UPDATE_TASK_MODE,
+  AFTER_CREATE_TASK_MODE,
 } from 'constant/values';
 import {converTimeStampToDateTime} from 'helper';
 import {useAppDispatch, useAppSelector} from 'redux/store';
@@ -53,11 +54,10 @@ export function TaskDetailScreen() {
     switch (currMode) {
       case CREATE_TASK_MODE:
         handleCreateMode();
-
         break;
+
       case UPDATE_TASK_MODE:
         handleUpdateMode();
-
         break;
     }
   }, [tasks, dispatch, id, currMode, currId]);
@@ -74,32 +74,43 @@ export function TaskDetailScreen() {
     setNewStatus(isChecked ? TASK_DONE : TASK_PROGRESS);
   };
 
+  const handleCreateTask = () => {
+    dispatch(
+      createTaskAction({
+        name: newName,
+        description: newDescription,
+        status: newStatus,
+        createdAt: new Date().valueOf(),
+        categoryId: categoryId,
+      }),
+    );
+    setCurrMode(AFTER_CREATE_TASK_MODE);
+  };
+
   const handleUpdateTask = () => {
+    dispatch(
+      updateTaskAction({
+        id: currId,
+        name: newName,
+        description: newDescription,
+        status: newStatus,
+        createdAt: new Date().valueOf(),
+      }),
+    );
+  };
+
+  const onClickSaveButton = () => {
     switch (currMode) {
       case CREATE_TASK_MODE:
-        dispatch(
-          createTaskAction({
-            name: newName,
-            description: newDescription,
-            status: newStatus,
-            createdAt: new Date().valueOf(),
-            categoryId: categoryId,
-          }),
-        );
-        setCurrMode(UPDATE_TASK_MODE);
-
+        handleCreateTask();
         break;
-      case UPDATE_TASK_MODE:
-        dispatch(
-          updateTaskAction({
-            id: currId,
-            name: newName,
-            description: newDescription,
-            status: newStatus,
-            createdAt: new Date().valueOf(),
-          }),
-        );
 
+      case UPDATE_TASK_MODE:
+        handleUpdateTask();
+        break;
+
+      default:
+        handleUpdateTask();
         break;
     }
 
@@ -114,7 +125,7 @@ export function TaskDetailScreen() {
           <Ionicons name="arrow-back" color={COLORS.black} size={25} />
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={handleUpdateTask}>
+        <TouchableOpacity onPress={onClickSaveButton}>
           <Ionicons name="save" color={COLORS.primary} size={35} />
         </TouchableOpacity>
       </View>
