@@ -53,6 +53,7 @@ export default function TaskRow({data}: Props) {
       name: data.name,
       description: data.description,
       status: data.status,
+      createdAt: data.createdAt,
     });
   };
 

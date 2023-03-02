@@ -18,4 +18,5 @@ export const COLORS = {
   taskDoneColorBorder: 'rgba(106,168,79, 1)',
   taskProgressColor: '#f4cccc',
   taskProgressColorBorder: 'rgba(235,69,95, 1)',
+  taskDoneColorBold: '#6aa84f',
 };
