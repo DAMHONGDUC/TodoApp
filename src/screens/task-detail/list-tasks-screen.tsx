@@ -96,7 +96,7 @@ export default function ListTasksScreen(): JSX.Element {
   };
 
   const handleCreateButton = () => {
-    navigation.navigate('TaskDetailScreen', {
+    navigation2.navigate('TaskDetailScreen', {
       mode: CREATE_TASK_MODE,
       categoryId: categoryId,
     });

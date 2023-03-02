@@ -51,6 +51,10 @@ export function TaskDetailScreen() {
       setNewStatus(TASK_PROGRESS);
     };
 
+    const handleAfterCreate = () => {
+      setNewCreatedAt(new Date().valueOf());
+    };
+
     switch (currMode) {
       case CREATE_TASK_MODE:
         handleCreateMode();
@@ -58,6 +62,10 @@ export function TaskDetailScreen() {
 
       case UPDATE_TASK_MODE:
         handleUpdateMode();
+        break;
+
+      case AFTER_CREATE_TASK_MODE:
+        handleAfterCreate();
         break;
     }
   }, [tasks, dispatch, id, currMode, currId]);
@@ -109,7 +117,7 @@ export function TaskDetailScreen() {
         handleUpdateTask();
         break;
 
-      default:
+      case AFTER_CREATE_TASK_MODE:
         handleUpdateTask();
         break;
     }
