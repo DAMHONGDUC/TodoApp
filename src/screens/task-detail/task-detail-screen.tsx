@@ -92,7 +92,7 @@ export function TaskDetailScreen() {
       case UPDATE_TASK_MODE:
         dispatch(
           updateTaskAction({
-            id: id,
+            id: currId,
             name: newName,
             description: newDescription,
             status: newStatus,
