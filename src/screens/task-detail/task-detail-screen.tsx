@@ -4,7 +4,6 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  FlatList,
   StatusBar,
 } from 'react-native';
 import {
@@ -18,8 +17,13 @@ import {ITask} from 'services/task/task-model';
 import SelectDropdown from 'react-native-select-dropdown';
 import {useEffect, useState} from 'react';
 import {useAppDispatch, useAppSelector} from 'redux/store';
-import {getTaskByCategoryIdAction} from 'redux/slices/task-slice';
+import {
+  deleteTaskAction,
+  getTaskByCategoryIdAction,
+} from 'redux/slices/task-slice';
 import LoadingComponent from 'components/loading-component';
+import {SwipeListView} from 'react-native-swipe-list-view';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const options: string[] = ['Done', 'Progress', 'All'];
 const defaultOption = 2;
@@ -63,6 +67,31 @@ export default function TaskDetailScreen(): JSX.Element {
     return <TaskRow data={item}></TaskRow>;
   };
 
+  const deleteRow = (id: string) => {
+    dispatch(deleteTaskAction({id: id}));
+  };
+
+  const renderHiddenItem = (rowData, rowMap) => {
+    return (
+      <View style={styles.rowBack}>
+        {/* <TouchableOpacity
+          style={[styles.backRightBtn, styles.backRightBtnLeft]}
+          onPress={() => closeRow(props.index)}>
+          <Ionicons name={'close'} color={'#6aa84f'} size={33}></Ionicons>
+        </TouchableOpacity> */}
+
+        <TouchableOpacity
+          style={[styles.backRightBtn, styles.backRightBtnRight]}
+          onPress={() => deleteRow(rowData.item.id)}>
+          <MaterialCommunityIcons
+            name={'delete'}
+            color={COLORS.primary}
+            size={30}></MaterialCommunityIcons>
+        </TouchableOpacity>
+      </View>
+    );
+  };
+
   return (
     <View style={styles.container}>
       <StatusBar backgroundColor={COLORS.white} barStyle="light-content" />
@@ -89,13 +118,29 @@ export default function TaskDetailScreen(): JSX.Element {
       {isLoading ? (
         <LoadingComponent />
       ) : (
-        <FlatList
-          data={showingData}
-          renderItem={renderItem}
-          keyExtractor={item => item.id.toString()}
-          ListEmptyComponent={
-            <Text style={styles.notiText}>{'You have no task'}</Text>
-          }></FlatList>
+        // <FlatList
+        //   data={showingData}
+        //   renderItem={renderItem}
+        //   keyExtractor={item => item.id.toString()}
+        //   ListEmptyComponent={
+        //     <Text style={styles.notiText}>{'You have no task'}</Text>
+        //   }></FlatList>
+        <View style={styles.container2}>
+          <SwipeListView
+            data={showingData}
+            renderItem={renderItem}
+            renderHiddenItem={renderHiddenItem}
+            leftOpenValue={0}
+            // rightOpenValue={-100}
+            rightOpenValue={-60}
+            previewRowKey={'0'}
+            previewOpenValue={-40}
+            previewOpenDelay={3000}
+            ListEmptyComponent={
+              <Text style={styles.notiText}>{'You have no task'}</Text>
+            }
+          />
+        </View>
       )}
     </View>
   );
@@ -107,6 +152,10 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.white,
     flex: 1,
     padding: 20,
+  },
+  container2: {
+    backgroundColor: 'white',
+    flex: 1,
   },
   header: {
     flexDirection: 'row',
@@ -132,4 +181,23 @@ const styles = StyleSheet.create({
   },
   buttonTextStyle: {fontSize: 14},
   dropDown: {marginBottom: 15, marginTop: 20},
+  rowBack: {
+    alignItems: 'center',
+    flex: 1,
+    flexDirection: 'row',
+  },
+  backRightBtn: {
+    alignItems: 'center',
+    bottom: 0,
+    justifyContent: 'center',
+    position: 'absolute',
+    top: 0,
+    borderRadius: 10,
+  },
+  backRightBtnLeft: {
+    right: 60,
+  },
+  backRightBtnRight: {
+    right: 10,
+  },
 });

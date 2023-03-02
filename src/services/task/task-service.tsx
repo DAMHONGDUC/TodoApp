@@ -1,4 +1,4 @@
-import {getAPI2, putAPI2} from 'helper/network';
+import {getAPI2, putAPI2, deleteAPI2} from 'helper/network';
 import {ITask, ITaskRequest} from './task-model';
 
 const endpoint = {
@@ -24,6 +24,11 @@ export const TaskService = {
     const res = await putAPI2(endpoint.allTasks + input.id, {
       status: input.status,
     });
+
+    return res;
+  },
+  deleteTask: async (input: ITaskRequest) => {
+    const res = await deleteAPI2(endpoint.allTasks + input.id);
 
     return res;
   },

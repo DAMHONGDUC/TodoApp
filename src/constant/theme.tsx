@@ -14,8 +14,8 @@ export const COLORS = {
   tabBarColor: '#EEEEEE',
   selectedColor: '#E0E0E0',
 
-  taskDoneColor: 'rgba(106,168,79, 0.2)',
+  taskDoneColor: '#d9ead3',
   taskDoneColorBorder: 'rgba(106,168,79, 1)',
-  taskProgressColor: 'rgba(235,69,95, 0.1)',
+  taskProgressColor: '#f4cccc',
   taskProgressColorBorder: 'rgba(235,69,95, 1)',
 };

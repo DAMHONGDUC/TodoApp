@@ -1,11 +1,11 @@
 export interface ITaskRequest {
   categoryId?: string;
   status?: string;
-  id?: number;
+  id?: string;
 }
 
 export interface ITask {
-  id: number;
+  id: string;
   category: number;
   name: string;
   description: string;

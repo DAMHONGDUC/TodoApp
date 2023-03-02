@@ -33,6 +33,15 @@ export const changeTaskStatusAction = createAsyncThunk(
   },
 );
 
+export const deleteTaskAction = createAsyncThunk(
+  'task/deleteTask',
+  async (input: ITaskRequest, _thunkApi) => {
+    const res = await TaskService.deleteTask(input);
+
+    return {success: res, input};
+  },
+);
+
 export const categorySlide = createSlice({
   name: 'category',
   initialState: initialState,
@@ -62,13 +71,26 @@ export const categorySlide = createSlice({
 
         state.tasks.forEach(e => {
           if (e.id === res.input.id) {
-            console.log(e);
             e.status = res.input.status!;
           }
         });
       }
     });
     builder.addCase(changeTaskStatusAction.rejected, (state, action) => {
+      showAndroidToast(action.error?.message ?? 'Something Wrong, try later !');
+    });
+
+    builder.addCase(deleteTaskAction.fulfilled, (state, action) => {
+      const res = action.payload;
+      console.log(res);
+
+      if (res.success) {
+        showAndroidToast('delete task successfully');
+
+        state.tasks = state.tasks.filter(e => e.id !== res.input.id);
+      }
+    });
+    builder.addCase(deleteTaskAction.rejected, (state, action) => {
       showAndroidToast(action.error?.message ?? 'Something Wrong, try later !');
     });
   },

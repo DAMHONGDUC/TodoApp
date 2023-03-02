@@ -75,7 +75,11 @@ export default function TaskRow({data}: Props) {
 }
 
 const styles = StyleSheet.create({
-  container1: {marginBottom: 10, marginTop: 10, borderRadius: 20},
+  container1: {
+    marginBottom: 10,
+    marginTop: 10,
+    borderRadius: 10,
+  },
   container2: {
     backgroundColor: COLORS.taskDoneColor,
     height: 100,
@@ -83,7 +87,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderColor: COLORS.taskDoneColorBorder,
     borderWidth: 1,
-    borderRadius: 20,
+    borderRadius: 10,
     justifyContent: 'space-between',
   },
   time: {

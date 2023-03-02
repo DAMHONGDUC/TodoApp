@@ -34,3 +34,13 @@ export const putAPI2 = async (endpoint: string, body: object) => {
     showAlert(`Something wrong, ${err}`);
   }
 };
+
+export const deleteAPI2 = async (endpoint: string) => {
+  try {
+    const res = await axios.delete(BASE_URL2 + endpoint);
+
+    return res?.status === 200;
+  } catch (err) {
+    showAlert(`Something wrong, ${err}`);
+  }
+};
