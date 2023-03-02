@@ -6,13 +6,13 @@ import {ITask, ITaskRequest} from 'services/task/task-model';
 interface ITaskStore {
   tasks: ITask[];
   isLoading: boolean;
-  // needReload: boolean;
+  newInsertedId: string;
 }
 
 const initialState: ITaskStore = {
   tasks: [],
   isLoading: false,
-  // needReload: false,
+  newInsertedId: '',
 };
 
 export const getTaskByCategoryIdAction = createAsyncThunk(
@@ -51,6 +51,19 @@ export const updateTaskAction = createAsyncThunk(
   },
 );
 
+export const createTaskAction = createAsyncThunk(
+  'task/createTask',
+  async (input: ITaskRequest, _thunkApi) => {
+    const id = await TaskService.getMaxTasksId();
+
+    const newInput = {...input, id: (parseInt(id) + 1).toString()};
+
+    const res = await TaskService.createTask(newInput);
+
+    return {success: res, newInput};
+  },
+);
+
 export const categorySlide = createSlice({
   name: 'category',
   initialState: initialState,
@@ -60,6 +73,7 @@ export const categorySlide = createSlice({
     },
   },
   extraReducers(builder) {
+    // getTaskByCategoryIdAction
     builder.addCase(getTaskByCategoryIdAction.fulfilled, (state, action) => {
       state.tasks = action.payload;
       state.isLoading = false;
@@ -72,6 +86,7 @@ export const categorySlide = createSlice({
       state.isLoading = true;
     });
 
+    // changeTaskStatusAction
     builder.addCase(changeTaskStatusAction.fulfilled, (state, action) => {
       const res = action.payload;
 
@@ -89,6 +104,7 @@ export const categorySlide = createSlice({
       showAndroidToast(action.error?.message ?? 'Something Wrong, try later !');
     });
 
+    // deleteTaskAction
     builder.addCase(deleteTaskAction.fulfilled, (state, action) => {
       const res = action.payload;
 
@@ -102,6 +118,7 @@ export const categorySlide = createSlice({
       showAndroidToast(action.error?.message ?? 'Something Wrong, try later !');
     });
 
+    // updateTaskAction
     builder.addCase(updateTaskAction.fulfilled, (state, action) => {
       const res = action.payload;
 
@@ -119,6 +136,31 @@ export const categorySlide = createSlice({
       }
     });
     builder.addCase(updateTaskAction.rejected, (state, action) => {
+      showAndroidToast(action.error?.message ?? 'Something Wrong, try later !');
+    });
+
+    // createTaskAction
+    builder.addCase(createTaskAction.fulfilled, (state, action) => {
+      const res = action.payload;
+
+      if (res.success) {
+        const newTask = res.newInput;
+
+        state.tasks.push({
+          id: newTask.id,
+          category: parseInt(newTask.categoryId!),
+          name: newTask.name!,
+          description: newTask.description!,
+          createdAt: newTask.createdAt!,
+          status: newTask.status!,
+        });
+
+        state.newInsertedId = newTask.id;
+
+        showAndroidToast('Create task successfully');
+      }
+    });
+    builder.addCase(createTaskAction.rejected, (state, action) => {
       showAndroidToast(action.error?.message ?? 'Something Wrong, try later !');
     });
   },

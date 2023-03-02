@@ -14,11 +14,13 @@ export type MainStackNavigatorParamList = {
   BottomTabStack: BottomTabNavigatorParamList;
   ListTasksScreen: {categoryId: string; categoryName: string};
   TaskDetailScreen: {
-    id: string;
-    name: string;
-    description: string;
-    status: string;
-    createdAt: number;
+    id?: string;
+    name?: string;
+    description?: string;
+    status?: string;
+    createdAt?: number;
+    mode: number;
+    categoryId?: string;
   };
 };
 

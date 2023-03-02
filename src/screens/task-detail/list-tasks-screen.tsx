@@ -24,6 +24,8 @@ import {
 import LoadingComponent from 'components/loading-component';
 import {SwipeListView} from 'react-native-swipe-list-view';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import {ListTaskNavigationProp} from 'navigation/types';
+import {CREATE_TASK_MODE} from 'constant/values';
 
 const options: string[] = ['Done', 'Progress', 'All'];
 const defaultOption = 2;
@@ -41,6 +43,7 @@ export default function ListTasksScreen(): JSX.Element {
   const [showingData, setShowingData] = useState([]);
   const dispatch = useAppDispatch();
   const {tasks, isLoading} = useAppSelector(state => state.task);
+  const navigation2 = useNavigation<ListTaskNavigationProp>();
 
   const handleBackButton = () => {
     navigation.pop();
@@ -92,6 +95,13 @@ export default function ListTasksScreen(): JSX.Element {
     );
   };
 
+  const handleCreateButton = () => {
+    navigation.navigate('TaskDetailScreen', {
+      mode: CREATE_TASK_MODE,
+      categoryId: categoryId,
+    });
+  };
+
   return (
     <View style={styles.container}>
       <StatusBar backgroundColor={COLORS.white} barStyle="light-content" />
@@ -101,6 +111,12 @@ export default function ListTasksScreen(): JSX.Element {
         </TouchableOpacity>
 
         <Text style={styles.mainTitle}>{categoryName} tasks</Text>
+
+        <TouchableOpacity
+          style={styles.createButton}
+          onPress={handleCreateButton}>
+          <Ionicons name="add" color={COLORS.black} size={30} />
+        </TouchableOpacity>
       </View>
       <View style={styles.dropDown}>
         <SelectDropdown
@@ -165,7 +181,7 @@ const styles = StyleSheet.create({
     color: COLORS.black,
     fontSize: 25,
     fontWeight: '500',
-    marginLeft: 20,
+    marginLeft: 30,
   },
   notiText: {
     color: COLORS.primary,
@@ -199,5 +215,9 @@ const styles = StyleSheet.create({
   },
   backRightBtnRight: {
     right: 10,
+  },
+  createButton: {
+    position: 'absolute',
+    right: 0,
   },
 });

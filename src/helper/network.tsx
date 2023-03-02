@@ -44,3 +44,15 @@ export const deleteAPI2 = async (endpoint: string) => {
     showAlert(`Something wrong, ${err}`);
   }
 };
+
+export const postAPI2 = async (endpoint: string, body: object) => {
+  try {
+    const res = await axios.post(BASE_URL2 + endpoint, body);
+
+    console.log(res);
+
+    return res?.status === 201;
+  } catch (err) {
+    showAlert(`Something wrong, ${err}`);
+  }
+};

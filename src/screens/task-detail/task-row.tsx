@@ -1,5 +1,5 @@
 import {COLORS} from 'constant/theme';
-import {TASK_DONE} from 'constant/values';
+import {TASK_DONE, UPDATE_TASK_MODE} from 'constant/values';
 import {useEffect, useState} from 'react';
 import {View, Text, StyleSheet, TouchableHighlight} from 'react-native';
 import {ITask} from 'services/task/task-model';
@@ -54,6 +54,7 @@ export default function TaskRow({data}: Props) {
       description: data.description,
       status: data.status,
       createdAt: data.createdAt,
+      mode: UPDATE_TASK_MODE,
     });
   };
 

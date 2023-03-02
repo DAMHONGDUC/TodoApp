@@ -13,30 +13,58 @@ import {COLORS} from 'constant/theme';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useEffect, useState} from 'react';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
-import {TASK_DONE, TASK_PROGRESS} from 'constant/values';
+import {
+  CREATE_TASK_MODE,
+  TASK_DONE,
+  TASK_PROGRESS,
+  UPDATE_TASK_MODE,
+} from 'constant/values';
 import {converTimeStampToDateTime} from 'helper';
 import {useAppDispatch, useAppSelector} from 'redux/store';
-import {updateTaskAction} from 'redux/slices/task-slice';
+import {createTaskAction, updateTaskAction} from 'redux/slices/task-slice';
 
 export function TaskDetailScreen() {
   const route = useRoute<ListTaskRouteProp>();
-  const {id, status} = route.params; // default value
+  const {id, status, mode, categoryId} = route.params; // default value
   const navigation = useNavigation<ListTaskNavigationProp>();
   const [newName, setNewName] = useState('');
   const [newDescription, setNewDescription] = useState('');
   const [newStatus, setNewStatus] = useState('');
   const [newCreatedAt, setNewCreatedAt] = useState(0);
   const dispatch = useAppDispatch();
-  const {tasks} = useAppSelector(state => state.task);
+  const {tasks, newInsertedId} = useAppSelector(state => state.task);
+  const [currMode, setCurrMode] = useState(mode);
+  const [currId, setCurrId] = useState(id);
 
   useEffect(() => {
-    const currTask = tasks.find(e => e.id === id);
+    const handleUpdateMode = () => {
+      const currTask = tasks.find(e => e.id === currId);
 
-    setNewName(currTask?.name ?? '');
-    setNewDescription(currTask?.description ?? '');
-    setNewStatus(currTask?.status ?? '');
-    setNewCreatedAt(currTask?.createdAt ?? 0);
-  }, [tasks, dispatch, id]);
+      setNewName(currTask?.name ?? '');
+      setNewDescription(currTask?.description ?? '');
+      setNewStatus(currTask?.status ?? '');
+      setNewCreatedAt(currTask?.createdAt ?? 0);
+    };
+
+    const handleCreateMode = () => {
+      setNewStatus(TASK_PROGRESS);
+    };
+
+    switch (currMode) {
+      case CREATE_TASK_MODE:
+        handleCreateMode();
+
+        break;
+      case UPDATE_TASK_MODE:
+        handleUpdateMode();
+
+        break;
+    }
+  }, [tasks, dispatch, id, currMode, currId]);
+
+  useEffect(() => {
+    if (newInsertedId) setCurrId(newInsertedId);
+  }, [newInsertedId]);
 
   const handleBackButton = () => {
     navigation.pop();
@@ -47,15 +75,33 @@ export function TaskDetailScreen() {
   };
 
   const handleUpdateTask = () => {
-    dispatch(
-      updateTaskAction({
-        id: id,
-        name: newName,
-        description: newDescription,
-        status: newStatus,
-        createdAt: new Date().valueOf(),
-      }),
-    );
+    switch (currMode) {
+      case CREATE_TASK_MODE:
+        dispatch(
+          createTaskAction({
+            name: newName,
+            description: newDescription,
+            status: newStatus,
+            createdAt: new Date().valueOf(),
+            categoryId: categoryId,
+          }),
+        );
+        setCurrMode(UPDATE_TASK_MODE);
+
+        break;
+      case UPDATE_TASK_MODE:
+        dispatch(
+          updateTaskAction({
+            id: id,
+            name: newName,
+            description: newDescription,
+            status: newStatus,
+            createdAt: new Date().valueOf(),
+          }),
+        );
+
+        break;
+    }
 
     Keyboard.dismiss();
   };
@@ -88,7 +134,10 @@ export function TaskDetailScreen() {
       </View>
 
       <Text style={styles.modify}>
-        Last modified: {converTimeStampToDateTime(newCreatedAt)}
+        Last modified:{' '}
+        {currMode === CREATE_TASK_MODE
+          ? 'now'
+          : converTimeStampToDateTime(newCreatedAt)}
       </Text>
 
       <TextInput

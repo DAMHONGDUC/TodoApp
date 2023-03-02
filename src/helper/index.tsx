@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Alert, ToastAndroid} from 'react-native';
 import {ICategory} from 'services/category/category-model';
+import {ITask} from 'services/task/task-model';
 
 export const setAsyncStorageData = async (storeKey: string, value: string) => {
   try {
