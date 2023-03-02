@@ -48,7 +48,11 @@ export const converTimeStampToDateTime = (timeStamp: number) => {
   const date = new Date(timeStamp);
 
   const dateConvert =
-    date.getHours() + ':' + date.getMinutes() + ', ' + date.toDateString();
+    ('0' + date.getHours()).slice(-2) +
+    ':' +
+    ('0' + date.getMinutes()).slice(-2) +
+    ', ' +
+    date.toDateString();
 
   return dateConvert || '';
 };

@@ -105,8 +105,6 @@ export const categorySlide = createSlice({
     builder.addCase(updateTaskAction.fulfilled, (state, action) => {
       const res = action.payload;
 
-      console.log(res);
-
       if (res.success) {
         state.tasks.forEach(e => {
           if (e.id === res.input.id) {
