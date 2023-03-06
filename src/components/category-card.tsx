@@ -8,16 +8,17 @@ import {ICategory} from 'services/category/category-model';
 type Props = {
   key: number;
   data: ICategory;
+  onPress: () => void;
 };
 
-export default function CategoryCard({data}: Props) {
+export default function CategoryCard({data, onPress}: Props) {
   const percent =
     Math.round((data.done / (data.done + data.progress)) * 100) || 0;
   const backgroundCustom = changeOpacityRGBA(data.color, 0.2);
 
   return (
     <TouchableHighlight
-      onPress={() => console.log(' go to task detail screen')}
+      onPress={onPress}
       underlayColor={COLORS.selectedColor}
       style={[styles.container]}>
       <View>

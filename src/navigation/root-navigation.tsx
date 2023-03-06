@@ -9,8 +9,9 @@ import {useAppSelector} from 'redux/store';
 import LoadingComponent from 'components/loading-component';
 import {useDispatch} from 'react-redux';
 import {setIsLogged} from 'redux/slices/auth-slice';
+import {RootStackNavigatorParamList} from './types';
 
-const RootStack = createNativeStackNavigator();
+const RootStack = createNativeStackNavigator<RootStackNavigatorParamList>();
 
 export default function RootNavigation(): JSX.Element {
   const {isAuthLoading, isLogged} = useAppSelector(state => state.auth);

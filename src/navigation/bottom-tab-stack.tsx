@@ -4,8 +4,9 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {COLORS} from 'constant/theme';
 import HomeScreen from 'screens/home/home-screen';
 import UserDetailScreen from 'screens/user/user-detail-screen';
+import {BottomTabNavigatorParamList} from './types';
 
-const BottomTab = createBottomTabNavigator();
+const BottomTab = createBottomTabNavigator<BottomTabNavigatorParamList>();
 
 export default function BottomTabStack() {
   return (
