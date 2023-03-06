@@ -6,25 +6,14 @@ import Modal from 'react-native-modal';
 import {useState} from 'react';
 import ModalRow from 'components/modal-row';
 import SeparateLine from 'components/separate-line';
-import {Camera, useCameraDevices} from 'react-native-vision-camera';
 import {getCameraPermission, requestCameraPermission} from 'helper';
 import {CAMERA_AUTHORIZED, CAMERA_DENIED} from 'constant/values';
+import {MainStackNavigationProp} from 'navigation/types';
+import {useNavigation} from '@react-navigation/native';
 
 export default function UserDetailScreen() {
   const [isModalVisible, setModalVisible] = useState(false);
-  const devices = useCameraDevices();
-  const device = devices.back;
-  const [showCamera, setShowCamera] = useState(false);
-
-  // useEffect(() => {
-  //   const getCameraPermission = async () => {
-  //     const res = await getAsyncStorageData(CAMERA_PERMISSION);
-
-  //     setCameraPermission(res || '');
-  //   };
-
-  //   getCameraPermission();
-  // }, []);
+  const navigation = useNavigation<MainStackNavigationProp>();
 
   const dispatch = useAppDispatch();
   const handleSignOut = () => {
@@ -39,10 +28,14 @@ export default function UserDetailScreen() {
     setModalVisible(false);
   };
 
+  const navToCameraScreen = () => {
+    navigation.navigate('CameraScreen');
+  };
+
   const handleRequestNewCameraPermissuion = async () => {
     const newCameraPermission = await requestCameraPermission();
     if (newCameraPermission === CAMERA_DENIED) await Linking.openSettings();
-    else if (newCameraPermission === CAMERA_AUTHORIZED) setShowCamera(true);
+    else if (newCameraPermission === CAMERA_AUTHORIZED) navToCameraScreen();
   };
 
   const openCamera = async () => {
@@ -53,7 +46,7 @@ export default function UserDetailScreen() {
         await handleRequestNewCameraPermissuion();
         break;
       case CAMERA_AUTHORIZED:
-        setShowCamera(true);
+        navToCameraScreen();
         break;
     }
 
@@ -62,13 +55,6 @@ export default function UserDetailScreen() {
 
   return (
     <View style={styles.container}>
-      {device && (
-        <Camera
-          style={StyleSheet.absoluteFill}
-          device={device}
-          isActive={showCamera}
-        />
-      )}
       <Modal style={{margin: 0}} isVisible={isModalVisible}>
         <View style={styles.modal}>
           <ModalRow onPress={openCamera} text="Open Camera"></ModalRow>

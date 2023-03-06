@@ -4,6 +4,7 @@ import BottomTabStack from './bottom-tab-stack';
 import ListTasksScreen from 'screens/task-detail/list-tasks-screen';
 import {MainStackNavigatorParamList} from './types';
 import {TaskDetailScreen} from 'screens/task-detail/task-detail-screen';
+import CameraScreen from 'screens/camera/camera-screen';
 
 const Stack = createNativeStackNavigator<MainStackNavigatorParamList>();
 
@@ -29,6 +30,14 @@ export default function MainStack() {
       <Stack.Screen
         name="TaskDetailScreen"
         component={TaskDetailScreen}
+        options={{
+          headerShadowVisible: false,
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="CameraScreen"
+        component={CameraScreen}
         options={{
           headerShadowVisible: false,
           headerShown: false,
