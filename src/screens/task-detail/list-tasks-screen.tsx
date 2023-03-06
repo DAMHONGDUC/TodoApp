@@ -26,9 +26,13 @@ import {SwipeListView} from 'react-native-swipe-list-view';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {ListTaskNavigationProp} from 'navigation/types';
 import {CREATE_TASK_MODE} from 'constant/values';
-
-const options: string[] = ['Done', 'Progress', 'All'];
-const defaultOption = 2;
+import {
+  TaskFilterOption,
+  DateFilterOption,
+  defaultTaskOption,
+  defaultDateOption,
+} from 'constant/values';
+import {filterData} from 'helper';
 
 type Props = {
   item: ITask;
@@ -39,7 +43,8 @@ export default function ListTasksScreen(): JSX.Element {
   const route = useRoute<TaskDetailScreenRouteProp>();
   const {categoryId, categoryName} = route.params;
   const navigation = useNavigation<MainStackNavigationProp>();
-  const [option, setOption] = useState(defaultOption);
+  const [taskOption, setTaskOption] = useState(defaultTaskOption);
+  const [dateOption, setDateOption] = useState(defaultDateOption);
   const [showingData, setShowingData] = useState([]);
   const dispatch = useAppDispatch();
   const {tasks, isLoading} = useAppSelector(state => state.task);
@@ -58,13 +63,8 @@ export default function ListTasksScreen(): JSX.Element {
   }, [dispatch, categoryId]);
 
   useEffect(() => {
-    tasks &&
-      setShowingData(
-        option === defaultOption
-          ? tasks
-          : tasks.filter(e => e.status === options[option]),
-      );
-  }, [option, tasks]);
+    tasks && setShowingData(filterData(taskOption, dateOption, tasks));
+  }, [taskOption, dateOption, tasks]);
 
   const renderItem = ({item}: Props) => {
     return <TaskRow data={item}></TaskRow>;
@@ -118,19 +118,36 @@ export default function ListTasksScreen(): JSX.Element {
           <Ionicons name="add" color={COLORS.black} size={30} />
         </TouchableOpacity>
       </View>
-      <View style={styles.dropDown}>
-        <SelectDropdown
-          data={options}
-          onSelect={(selectedItem, index) => {
-            setOption(index);
-          }}
-          defaultValue={options[defaultOption]}
-          rowStyle={styles.rowStyle}
-          rowTextStyle={styles.rowTextStyle}
-          buttonStyle={styles.buttonStyle}
-          buttonTextStyle={styles.buttonTextStyle}
-        />
+
+      <View style={styles.dropDownSection}>
+        <View style={styles.dropDown}>
+          <SelectDropdown
+            data={TaskFilterOption}
+            onSelect={(selectedItem, index) => {
+              setTaskOption(index);
+            }}
+            defaultValue={TaskFilterOption[defaultTaskOption]}
+            rowStyle={styles.rowStyle}
+            rowTextStyle={styles.rowTextStyle}
+            buttonStyle={styles.buttonStyle}
+            buttonTextStyle={styles.buttonTextStyle}
+          />
+        </View>
+        <View style={styles.dropDown}>
+          <SelectDropdown
+            data={DateFilterOption}
+            onSelect={(selectedItem, index) => {
+              setDateOption(index);
+            }}
+            defaultValue={DateFilterOption[defaultDateOption]}
+            rowStyle={styles.rowStyle}
+            rowTextStyle={styles.rowTextStyle}
+            buttonStyle={styles.buttonStyle}
+            buttonTextStyle={styles.buttonTextStyle}
+          />
+        </View>
       </View>
+
       {isLoading ? (
         <LoadingComponent />
       ) : (
@@ -219,5 +236,9 @@ const styles = StyleSheet.create({
   createButton: {
     position: 'absolute',
     right: 0,
+  },
+  dropDownSection: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
 });
