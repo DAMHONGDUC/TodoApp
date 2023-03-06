@@ -22,3 +22,11 @@ export const DateFilterOption: string[] = [
   'All',
 ];
 export const defaultDateOption = 3;
+
+export const CAMERA_AUTHORIZED = 'authorized';
+
+export const CAMERA_NOT_DETERMINED = 'not-determined';
+
+export const CAMERA_DENIED = 'denied';
+
+export const CAMERA_PERMISSION = 'CAMERA_PERMISSION';

@@ -5,9 +5,10 @@ import {ITask} from 'services/task/task-model';
 import {
   TaskFilterOption,
   DateFilterOption,
-  defaultDateOption,
   defaultTaskOption,
+  CAMERA_DENIED,
 } from 'constant/values';
+import {Camera} from 'react-native-vision-camera';
 
 export const setAsyncStorageData = async (storeKey: string, value: string) => {
   try {
@@ -68,8 +69,8 @@ const isToday = (inputDate: number) => {
   const today = new Date();
   const date = new Date(inputDate);
 
-  console.log(today.toDateString());
-  console.log(date.toDateString());
+  // console.log(today.toDateString());
+  // console.log(date.toDateString());
 
   if (today.toDateString() === date.toDateString()) {
     return true;
@@ -94,9 +95,9 @@ const isLastWeek = (inputDate: number) => {
   const lastWeek = new Date();
   lastWeek.setDate(lastWeek.getDate() - 7);
   const date = new Date(inputDate);
-  const today = new Date();
+  //const today = new Date();
 
-  console.log(date, date.toDateString() < today.toDateString());
+  //console.log(date, date.toDateString() < today.toDateString());
   if (
     date.toDateString() >= lastWeek.toDateString()
     //&& date.toDateString() <= today.toDateString()
@@ -138,4 +139,16 @@ export const filterData = (
   }
 
   return result;
+};
+
+export const requestCameraPermission = async () => {
+  const newCameraPermission = await Camera.requestCameraPermission();
+
+  return newCameraPermission;
+};
+
+export const getCameraPermission = async () => {
+  const cameraPermission = await Camera.getCameraPermissionStatus();
+
+  return cameraPermission;
 };
