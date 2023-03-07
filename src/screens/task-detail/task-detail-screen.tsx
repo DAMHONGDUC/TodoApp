@@ -25,17 +25,19 @@ import {useAppDispatch, useAppSelector} from 'redux/store';
 import {createTaskAction, updateTaskAction} from 'redux/slices/task-slice';
 
 export function TaskDetailScreen() {
-  const route = useRoute<ListTaskRouteProp>();
-  const {id, status, mode, categoryId} = route.params; // default value
   const navigation = useNavigation<ListTaskNavigationProp>();
-  const [newName, setNewName] = useState('');
-  const [newDescription, setNewDescription] = useState('');
-  const [newStatus, setNewStatus] = useState('');
-  const [newCreatedAt, setNewCreatedAt] = useState(0);
+  const route = useRoute<ListTaskRouteProp>();
+  const {id, status, mode, categoryId} = route.params;
+
+  const [newName, setNewName] = useState<string>('');
+  const [newDescription, setNewDescription] = useState<string>('');
+  const [newStatus, setNewStatus] = useState<string>('');
+  const [newCreatedAt, setNewCreatedAt] = useState<number>(0);
+  const [currMode, setCurrMode] = useState<number>(mode);
+  const [currId, setCurrId] = useState<string | undefined>(id);
+
   const dispatch = useAppDispatch();
   const {tasks, newInsertedId} = useAppSelector(state => state.task);
-  const [currMode, setCurrMode] = useState(mode);
-  const [currId, setCurrId] = useState(id);
 
   useEffect(() => {
     const handleUpdateMode = () => {

@@ -12,8 +12,9 @@ import {MainStackNavigationProp} from 'navigation/types';
 import {useNavigation} from '@react-navigation/native';
 
 export default function UserDetailScreen() {
-  const [isModalVisible, setModalVisible] = useState(false);
   const navigation = useNavigation<MainStackNavigationProp>();
+
+  const [isModalVisible, setModalVisible] = useState(false);
 
   const dispatch = useAppDispatch();
   const handleSignOut = () => {

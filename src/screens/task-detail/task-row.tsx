@@ -15,11 +15,13 @@ type Props = {
 };
 
 export default function TaskRow({data}: Props) {
-  const [color, setColor] = useState('');
-  const [borderColor, setBorderColor] = useState('');
-  const [toggleCheckBox, setToggleCheckBox] = useState(false);
-  const dispacth = useAppDispatch();
   const navigation = useNavigation<ListTaskNavigationProp>();
+
+  const [color, setColor] = useState<string>('');
+  const [borderColor, setBorderColor] = useState<string>('');
+  const [toggleCheckBox, setToggleCheckBox] = useState<boolean>(false);
+
+  const dispacth = useAppDispatch();
 
   useEffect(() => {
     setColor(

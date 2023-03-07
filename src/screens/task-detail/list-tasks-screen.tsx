@@ -37,15 +37,17 @@ type Props = {
 
 export default function ListTasksScreen(): JSX.Element {
   const route = useRoute<TaskDetailScreenRouteProp>();
-  const {categoryId, categoryName} = route.params;
   const navigation = useNavigation<MainStackNavigationProp>();
+  const navigation2 = useNavigation<ListTaskNavigationProp>();
+  const {categoryId, categoryName} = route.params;
+
   const [taskOption, setTaskOption] = useState(defaultTaskOption);
-  const [dateOption, setDateOption] = useState();
-  const [showingData, setShowingData] = useState([]);
+  const [dateOption, setDateOption] = useState<Date | undefined>();
+  const [showingData, setShowingData] = useState<ITask[]>([]);
+  const [calendarSelected, setCalendarSelected] = useState(false);
+
   const dispatch = useAppDispatch();
   const {tasks, isLoading} = useAppSelector(state => state.task);
-  const navigation2 = useNavigation<ListTaskNavigationProp>();
-  const [calendarSelected, setCalendarSelected] = useState(false);
 
   const handleBackButton = () => {
     navigation.pop();
@@ -71,7 +73,7 @@ export default function ListTasksScreen(): JSX.Element {
     dispatch(deleteTaskAction({id: id}));
   };
 
-  const renderHiddenItem = (rowData, rowMap) => {
+  const renderHiddenItem = (rowData: any) => {
     return (
       <View style={styles.rowBack}>
         <TouchableOpacity
@@ -95,9 +97,9 @@ export default function ListTasksScreen(): JSX.Element {
 
   const handleDateSelected = (date: Date) => {
     if (isDateEqual(dateOption, date)) {
-      // case user click a date again (already choose before) -> we un select this date
+      // case: user click a date again (already choose before) -> we un-select this date
       setShowingData(tasks);
-      setDateOption(null);
+      setDateOption(undefined);
       setCalendarSelected(false);
     } else {
       setDateOption(date);
@@ -151,7 +153,6 @@ export default function ListTasksScreen(): JSX.Element {
           {color: calendarSelected ? COLORS.primary : COLORS.black},
         ]}
         onDateSelected={date => handleDateSelected(date)}
-        // selectedDate={new Date()}
       />
 
       {isLoading ? (

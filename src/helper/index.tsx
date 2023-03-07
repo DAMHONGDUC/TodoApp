@@ -62,7 +62,7 @@ export const converTimeStampToDateTime = (timeStamp: number | Date) => {
 
 export const filterData = (
   tasks: ITask[],
-  dateOption: Date,
+  dateOption: Date | undefined,
   taskOption: number,
 ) => {
   const filterByStatus = filterDataByStatus(tasks, taskOption);
@@ -82,7 +82,9 @@ export const filterDataByDate = (tasks: ITask[], dateOption: Date) => {
   return tasks.filter(e => isDateEqual(dateOption, e.createdAt));
 };
 
-export const isDateEqual = (date1: Date, date2: number | Date) => {
+export const isDateEqual = (date1: Date | undefined, date2: number | Date) => {
+  if (!date1) return false;
+
   const d1 = new Date(date1);
   const d2 = new Date(date2);
 

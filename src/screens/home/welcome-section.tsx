@@ -7,15 +7,15 @@ import {useEffect, useState} from 'react';
 
 export default function WelcomeSection(): JSX.Element {
   const {allCategory} = useAppSelector(state => state.category);
-  const [taskDone, setTaskDone] = useState(0);
-  const [allTask, setAllTask] = useState(0);
+  const [taskDone, setTaskDone] = useState<number>(0);
+  const [numOfTasks, setNumOfTasks] = useState<number>(0);
 
   useEffect(() => {
     const done = getAllTaskDone(allCategory);
     const progress = getAllTaskProgress(allCategory);
 
     setTaskDone(done);
-    setAllTask(done + progress);
+    setNumOfTasks(done + progress);
   }, [allCategory]);
 
   return (
@@ -26,11 +26,11 @@ export default function WelcomeSection(): JSX.Element {
       </View>
       <View style={styles.column}>
         <Text style={styles.text}>
-          {taskDone} out of {allTask} task are completed
+          {taskDone} out of {numOfTasks} task are completed
         </Text>
         <ProgressBar
           completed={
-            allTask === 0 ? 0 : (taskDone / allTask) * 100
+            numOfTasks === 0 ? 0 : (taskDone / numOfTasks) * 100
           }></ProgressBar>
       </View>
       <Image style={styles.image} source={require('assets/rocket.png')}></Image>

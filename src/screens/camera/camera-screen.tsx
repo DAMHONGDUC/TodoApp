@@ -7,13 +7,13 @@ import {
   TouchableHighlight,
 } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import {COLORS} from 'constant/theme';
 import {useEffect, useRef, useState} from 'react';
 import RNFS from 'react-native-fs';
 import {IMAGE_PATH} from 'constant/values';
 import {MainStackNavigationProp} from 'navigation/types';
 import {useNavigation} from '@react-navigation/native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 
 export default function CameraScreen() {
   const devices = useCameraDevices();
