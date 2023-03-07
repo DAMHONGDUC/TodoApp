@@ -2,11 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Alert, ToastAndroid} from 'react-native';
 import {ICategory} from 'services/category/category-model';
 import {ITask} from 'services/task/task-model';
-import {
-  TaskFilterOption,
-  DateFilterOption,
-  defaultTaskOption,
-} from 'constant/values';
+import {TaskFilterOption, defaultTaskOption} from 'constant/values';
 import {Camera} from 'react-native-vision-camera';
 
 export const setAsyncStorageData = async (storeKey: string, value: string) => {
@@ -71,7 +67,9 @@ export const filterData = (
 ) => {
   const filterByStatus = filterDataByStatus(tasks, taskOption);
 
-  return filterDataByDate(filterByStatus, dateOption);
+  return dateOption
+    ? filterDataByDate(filterByStatus, dateOption)
+    : filterByStatus;
 };
 
 export const filterDataByStatus = (tasks: ITask[], taskOption: number) => {

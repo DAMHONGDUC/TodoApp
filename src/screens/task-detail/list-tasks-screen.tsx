@@ -12,6 +12,7 @@ import {
 } from 'navigation/types';
 import {COLORS} from 'constant/theme';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import TaskRow from 'screens/task-detail/task-row';
 import {ITask} from 'services/task/task-model';
 import SelectDropdown from 'react-native-select-dropdown';
@@ -23,7 +24,6 @@ import {
 } from 'redux/slices/task-slice';
 import LoadingComponent from 'components/loading-component';
 import {SwipeListView} from 'react-native-swipe-list-view';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {ListTaskNavigationProp} from 'navigation/types';
 import {CREATE_TASK_MODE} from 'constant/values';
 import {TaskFilterOption, defaultTaskOption} from 'constant/values';
@@ -45,6 +45,7 @@ export default function ListTasksScreen(): JSX.Element {
   const dispatch = useAppDispatch();
   const {tasks, isLoading} = useAppSelector(state => state.task);
   const navigation2 = useNavigation<ListTaskNavigationProp>();
+  const [calendarSelected, setCalendarSelected] = useState(false);
 
   const handleBackButton = () => {
     navigation.pop();
@@ -59,10 +60,7 @@ export default function ListTasksScreen(): JSX.Element {
   }, [dispatch, categoryId]);
 
   useEffect(() => {
-    tasks &&
-      setShowingData(
-        dateOption ? filterData(tasks, dateOption, taskOption) : tasks,
-      );
+    tasks && setShowingData(filterData(tasks, dateOption, taskOption));
   }, [taskOption, dateOption, tasks]);
 
   const renderItem = ({item}: Props) => {
@@ -96,9 +94,15 @@ export default function ListTasksScreen(): JSX.Element {
   };
 
   const handleDateSelected = (date: Date) => {
-    // console.log(isDateEqual(dateOption, date));
-
-    setDateOption(date);
+    if (isDateEqual(dateOption, date)) {
+      // case user click a date again (already choose before) -> we un select this date
+      setShowingData(tasks);
+      setDateOption(null);
+      setCalendarSelected(false);
+    } else {
+      setDateOption(date);
+      setCalendarSelected(true);
+    }
   };
 
   return (
@@ -140,9 +144,12 @@ export default function ListTasksScreen(): JSX.Element {
         iconContainer={{flex: 0.1}}
         highlightDateNumberStyle={[
           styles.dateNumberText,
-          {color: COLORS.primary},
+          {color: calendarSelected ? COLORS.primary : COLORS.black},
         ]}
-        highlightDateNameStyle={[styles.dateNameText, {color: COLORS.primary}]}
+        highlightDateNameStyle={[
+          styles.dateNameText,
+          {color: calendarSelected ? COLORS.primary : COLORS.black},
+        ]}
         onDateSelected={date => handleDateSelected(date)}
         // selectedDate={new Date()}
       />
