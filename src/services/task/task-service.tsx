@@ -38,7 +38,6 @@ export const TaskService = {
       name: input.name,
       status: input.status,
       description: input.description,
-      createdAt: input.createdAt,
     });
 
     return res;

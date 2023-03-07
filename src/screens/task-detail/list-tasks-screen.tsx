@@ -12,6 +12,7 @@ import {
 } from 'navigation/types';
 import {COLORS} from 'constant/theme';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import TaskRow from 'screens/task-detail/task-row';
 import {ITask} from 'services/task/task-model';
 import SelectDropdown from 'react-native-select-dropdown';
@@ -23,12 +24,11 @@ import {
 } from 'redux/slices/task-slice';
 import LoadingComponent from 'components/loading-component';
 import {SwipeListView} from 'react-native-swipe-list-view';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {ListTaskNavigationProp} from 'navigation/types';
 import {CREATE_TASK_MODE} from 'constant/values';
-
-const options: string[] = ['Done', 'Progress', 'All'];
-const defaultOption = 2;
+import {TaskFilterOption, defaultTaskOption} from 'constant/values';
+import {filterData, isDateEqual} from 'helper';
+import CalendarStrip from 'react-native-calendar-strip';
 
 type Props = {
   item: ITask;
@@ -37,13 +37,17 @@ type Props = {
 
 export default function ListTasksScreen(): JSX.Element {
   const route = useRoute<TaskDetailScreenRouteProp>();
-  const {categoryId, categoryName} = route.params;
   const navigation = useNavigation<MainStackNavigationProp>();
-  const [option, setOption] = useState(defaultOption);
-  const [showingData, setShowingData] = useState([]);
+  const navigation2 = useNavigation<ListTaskNavigationProp>();
+  const {categoryId, categoryName} = route.params;
+
+  const [taskOption, setTaskOption] = useState(defaultTaskOption);
+  const [dateOption, setDateOption] = useState<Date | undefined>();
+  const [showingData, setShowingData] = useState<ITask[]>([]);
+  const [calendarSelected, setCalendarSelected] = useState(false);
+
   const dispatch = useAppDispatch();
   const {tasks, isLoading} = useAppSelector(state => state.task);
-  const navigation2 = useNavigation<ListTaskNavigationProp>();
 
   const handleBackButton = () => {
     navigation.pop();
@@ -58,13 +62,8 @@ export default function ListTasksScreen(): JSX.Element {
   }, [dispatch, categoryId]);
 
   useEffect(() => {
-    tasks &&
-      setShowingData(
-        option === defaultOption
-          ? tasks
-          : tasks.filter(e => e.status === options[option]),
-      );
-  }, [option, tasks]);
+    tasks && setShowingData(filterData(tasks, dateOption, taskOption));
+  }, [taskOption, dateOption, tasks]);
 
   const renderItem = ({item}: Props) => {
     return <TaskRow data={item}></TaskRow>;
@@ -74,15 +73,9 @@ export default function ListTasksScreen(): JSX.Element {
     dispatch(deleteTaskAction({id: id}));
   };
 
-  const renderHiddenItem = (rowData, rowMap) => {
+  const renderHiddenItem = (rowData: any) => {
     return (
       <View style={styles.rowBack}>
-        {/* <TouchableOpacity
-          style={[styles.backRightBtn, styles.backRightBtnLeft]}
-          onPress={() => closeRow(props.index)}>
-          <Ionicons name={'close'} color={'#6aa84f'} size={33}></Ionicons>
-        </TouchableOpacity> */}
-
         <TouchableOpacity
           style={[styles.backRightBtn, styles.backRightBtnRight]}
           onPress={() => deleteRow(rowData.item.id)}>
@@ -102,6 +95,18 @@ export default function ListTasksScreen(): JSX.Element {
     });
   };
 
+  const handleDateSelected = (date: Date) => {
+    if (isDateEqual(dateOption, date)) {
+      // case: user click a date again (already choose before) -> we un-select this date
+      setShowingData(tasks);
+      setDateOption(undefined);
+      setCalendarSelected(false);
+    } else {
+      setDateOption(date);
+      setCalendarSelected(true);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <StatusBar backgroundColor={COLORS.white} barStyle="light-content" />
@@ -112,42 +117,53 @@ export default function ListTasksScreen(): JSX.Element {
 
         <Text style={styles.mainTitle}>{categoryName} tasks</Text>
 
+        <SelectDropdown
+          data={TaskFilterOption}
+          onSelect={(selectedItem, index) => {
+            setTaskOption(index);
+          }}
+          defaultValue={TaskFilterOption[defaultTaskOption]}
+          rowStyle={styles.rowStyle}
+          rowTextStyle={styles.rowTextStyle}
+          buttonStyle={styles.buttonStyle}
+          buttonTextStyle={styles.buttonTextStyle}
+        />
+
         <TouchableOpacity
           style={styles.createButton}
           onPress={handleCreateButton}>
           <Ionicons name="add" color={COLORS.black} size={30} />
         </TouchableOpacity>
       </View>
-      <View style={styles.dropDown}>
-        <SelectDropdown
-          data={options}
-          onSelect={(selectedItem, index) => {
-            setOption(index);
-          }}
-          defaultValue={options[defaultOption]}
-          rowStyle={styles.rowStyle}
-          rowTextStyle={styles.rowTextStyle}
-          buttonStyle={styles.buttonStyle}
-          buttonTextStyle={styles.buttonTextStyle}
-        />
-      </View>
+
+      <CalendarStrip
+        scrollable
+        style={styles.calendar}
+        calendarColor={COLORS.white}
+        calendarHeaderStyle={styles.calendarHeader}
+        dateNumberStyle={[styles.dateNumberText, {color: COLORS.black}]}
+        dateNameStyle={[styles.dateNameText, {color: COLORS.black}]}
+        iconContainer={{flex: 0.1}}
+        highlightDateNumberStyle={[
+          styles.dateNumberText,
+          {color: calendarSelected ? COLORS.primary : COLORS.black},
+        ]}
+        highlightDateNameStyle={[
+          styles.dateNameText,
+          {color: calendarSelected ? COLORS.primary : COLORS.black},
+        ]}
+        onDateSelected={date => handleDateSelected(date)}
+      />
+
       {isLoading ? (
         <LoadingComponent />
       ) : (
-        // <FlatList
-        //   data={showingData}
-        //   renderItem={renderItem}
-        //   keyExtractor={item => item.id.toString()}
-        //   ListEmptyComponent={
-        //     <Text style={styles.notiText}>{'You have no task'}</Text>
-        //   }></FlatList>
         <View style={styles.container2}>
           <SwipeListView
             data={showingData}
             renderItem={renderItem}
             renderHiddenItem={renderHiddenItem}
             leftOpenValue={0}
-            // rightOpenValue={-100}
             rightOpenValue={-60}
             previewRowKey={'0'}
             previewOpenValue={-40}
@@ -181,22 +197,23 @@ const styles = StyleSheet.create({
     color: COLORS.black,
     fontSize: 25,
     fontWeight: '500',
-    marginLeft: 30,
+    marginLeft: 20,
+    marginRight: 20,
   },
   notiText: {
     color: COLORS.primary,
   },
   rowStyle: {backgroundColor: COLORS.white},
-  rowTextStyle: {fontSize: 14},
+  rowTextStyle: {fontSize: 13},
   buttonStyle: {
-    width: 150,
+    width: 100,
+    height: 40,
     borderColor: COLORS.black,
     borderWidth: 1,
     backgroundColor: COLORS.white,
-    borderRadius: 10,
+    borderRadius: 5,
   },
-  buttonTextStyle: {fontSize: 14},
-  dropDown: {marginBottom: 15, marginTop: 20},
+  buttonTextStyle: {fontSize: 13},
   rowBack: {
     alignItems: 'center',
     flex: 1,
@@ -220,4 +237,20 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 0,
   },
+  dropDownSection: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  calendar: {
+    height: 120,
+    paddingTop: 20,
+    paddingBottom: 20,
+  },
+  calendarHeader: {
+    color: COLORS.primary,
+    fontSize: 15,
+    marginBottom: 10,
+  },
+  dateNumberText: {fontSize: 14},
+  dateNameText: {fontSize: 10},
 });
