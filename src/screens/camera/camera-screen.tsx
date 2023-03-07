@@ -13,6 +13,7 @@ import RNFS from 'react-native-fs';
 import {IMAGE_PATH} from 'constant/values';
 import {MainStackNavigationProp} from 'navigation/types';
 import {useNavigation} from '@react-navigation/native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 export default function CameraScreen() {
   const devices = useCameraDevices();
@@ -34,7 +35,7 @@ export default function CameraScreen() {
   }, []);
 
   const navToImageView = () => {
-    navigation.navigate('ImageViewScreen');
+    navigation.replace('ImageViewScreen');
   };
 
   const handleTakePhoto = async () => {
@@ -54,15 +55,20 @@ export default function CameraScreen() {
       await RNFS.moveFile(photo.path, newPath);
 
       setNewestImage({uri: 'file://' + newPath});
-
-      //   let files = await RNFS.readDir(IMAGE_PATH);
-
-      //   console.log(JSON.stringify(files));
     }
+  };
+
+  const handleBackButton = () => {
+    navigation.pop();
   };
 
   return (
     <View style={styles.container}>
+      <View style={styles.header}>
+        <TouchableOpacity style={styles.backButton} onPress={handleBackButton}>
+          <Ionicons name="arrow-back" color={COLORS.white} size={25} />
+        </TouchableOpacity>
+      </View>
       <View style={styles.cameraSection}>
         {device && (
           <Camera
@@ -70,7 +76,6 @@ export default function CameraScreen() {
             style={StyleSheet.absoluteFillObject}
             device={device!}
             isActive={true}
-            preset="medium"
             photo={true}
           />
         )}
@@ -100,7 +105,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
   },
   cameraSection: {
-    flex: 0.8,
+    flex: 0.7,
   },
   footer: {
     flex: 0.2,
@@ -117,5 +122,13 @@ const styles = StyleSheet.create({
   imageContainer: {
     position: 'absolute',
     left: 45,
+  },
+  header: {
+    flex: 0.1,
+    backgroundColor: COLORS.black,
+    justifyContent: 'center',
+  },
+  backButton: {
+    marginLeft: 5,
   },
 });

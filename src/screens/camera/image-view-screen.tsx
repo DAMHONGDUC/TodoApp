@@ -43,7 +43,7 @@ export default function ImageViewScreen() {
   };
 
   const handleBackButton = () => {
-    navigation.pop();
+    navigation.replace('CameraScreen');
   };
 
   return (
