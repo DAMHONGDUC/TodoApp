@@ -102,7 +102,6 @@ export function TaskDetailScreen() {
         name: newName,
         description: newDescription,
         status: newStatus,
-        createdAt: new Date().valueOf(),
       }),
     );
   };
@@ -153,7 +152,7 @@ export function TaskDetailScreen() {
       </View>
 
       <Text style={styles.modify}>
-        Last modified:{' '}
+        Created at:{' '}
         {currMode === CREATE_TASK_MODE
           ? 'now'
           : converTimeStampToDateTime(newCreatedAt)}

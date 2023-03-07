@@ -11,7 +11,7 @@ import RNFS from 'react-native-fs';
 import {IMAGE_PATH} from 'constant/values';
 import {COLORS} from 'constant/theme';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {converMtimeToDateTime} from 'helper';
+import {converTimeStampToDateTime} from 'helper';
 import {MainStackNavigationProp} from 'navigation/types';
 import {useNavigation} from '@react-navigation/native';
 
@@ -35,7 +35,7 @@ export default function ImageViewScreen() {
           style={styles.image}
           source={{uri: 'file://' + item.path}}></Image>
         <Text style={[styles.nameText, {marginTop: 30}]}>
-          {converMtimeToDateTime(item.mtime)}
+          {converTimeStampToDateTime(item.mtime)}
         </Text>
         <Text style={styles.nameText}>{item.name}</Text>
       </View>

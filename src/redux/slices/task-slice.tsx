@@ -75,7 +75,7 @@ export const categorySlide = createSlice({
   extraReducers(builder) {
     // getTaskByCategoryIdAction
     builder.addCase(getTaskByCategoryIdAction.fulfilled, (state, action) => {
-      state.tasks = action.payload;
+      state.tasks = action.payload.reverse();
       state.isLoading = false;
     });
     builder.addCase(getTaskByCategoryIdAction.rejected, (state, action) => {
@@ -128,7 +128,6 @@ export const categorySlide = createSlice({
             e.name = res.input.name!;
             e.description = res.input.description!;
             e.status = res.input.status!;
-            e.createdAt = res.input.createdAt!;
           }
         });
 
@@ -146,14 +145,17 @@ export const categorySlide = createSlice({
       if (res.success) {
         const newTask = res.newInput;
 
-        state.tasks.push({
-          id: newTask.id,
-          category: parseInt(newTask.categoryId!),
-          name: newTask.name!,
-          description: newTask.description!,
-          createdAt: newTask.createdAt!,
-          status: newTask.status!,
-        });
+        state.tasks = [
+          {
+            id: newTask.id,
+            category: parseInt(newTask.categoryId!),
+            name: newTask.name!,
+            description: newTask.description!,
+            createdAt: newTask.createdAt!,
+            status: newTask.status!,
+          },
+          ...state.tasks,
+        ];
 
         state.newInsertedId = newTask.id;
 

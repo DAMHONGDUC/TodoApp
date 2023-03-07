@@ -6,7 +6,6 @@ import {
   TaskFilterOption,
   DateFilterOption,
   defaultTaskOption,
-  CAMERA_DENIED,
 } from 'constant/values';
 import {Camera} from 'react-native-vision-camera';
 
@@ -52,7 +51,7 @@ export const getAllTaskProgress = (allCategory: ICategory[]) => {
   return res || 0;
 };
 
-export const converTimeStampToDateTime = (timeStamp: number) => {
+export const converTimeStampToDateTime = (timeStamp: number | Date) => {
   const date = new Date(timeStamp);
 
   const dateConvert =
@@ -63,86 +62,36 @@ export const converTimeStampToDateTime = (timeStamp: number) => {
     date.toDateString();
 
   return dateConvert || '';
-};
-
-export const converMtimeToDateTime = (timeStamp: Date) => {
-  const date = new Date(timeStamp);
-
-  const dateConvert =
-    ('0' + date.getHours()).slice(-2) +
-    ':' +
-    ('0' + date.getMinutes()).slice(-2) +
-    ', ' +
-    date.toDateString();
-
-  return dateConvert || '';
-};
-
-const isToday = (inputDate: number) => {
-  const today = new Date();
-  const date = new Date(inputDate);
-
-  if (today.toDateString() === date.toDateString()) {
-    return true;
-  }
-
-  return false;
-};
-
-const isYesterday = (inputDate: number) => {
-  const yesterday = new Date();
-  yesterday.setDate(yesterday.getDate() - 1);
-  const date = new Date(inputDate);
-
-  if (yesterday.toDateString() === date.toDateString()) {
-    return true;
-  }
-
-  return false;
-};
-
-const isLastWeek = (inputDate: number) => {
-  const lastWeek = new Date();
-  lastWeek.setDate(lastWeek.getDate() - 7);
-  const date = new Date(inputDate);
-
-  if (date.toDateString() >= lastWeek.toDateString()) {
-    return true;
-  }
-
-  return false;
 };
 
 export const filterData = (
-  taskOption: number,
-  dateOption: number,
   tasks: ITask[],
+  dateOption: Date,
+  taskOption: number,
 ) => {
-  let result: ITask[] = [];
+  const filterByStatus = filterDataByStatus(tasks, taskOption);
 
-  // taskOption
-  result =
-    taskOption === defaultTaskOption
-      ? tasks
-      : tasks.filter(e => e.status === TaskFilterOption[taskOption]);
+  return filterDataByDate(filterByStatus, dateOption);
+};
 
-  // dateOption
-  switch (DateFilterOption[dateOption]) {
-    case DateFilterOption[0]:
-      result = result.filter(e => isToday(e.createdAt));
-      break;
-    case DateFilterOption[1]:
-      result = result.filter(e => isYesterday(e.createdAt));
-      break;
-    case DateFilterOption[2]:
-      result = result.filter(e => isLastWeek(e.createdAt));
-      break;
-    case DateFilterOption[3]:
-      // do nothing
-      break;
-  }
+export const filterDataByStatus = (tasks: ITask[], taskOption: number) => {
+  return taskOption === defaultTaskOption
+    ? tasks
+    : tasks.filter(e => e.status === TaskFilterOption[taskOption]);
+};
 
-  return result;
+export const filterDataByDate = (tasks: ITask[], dateOption: Date) => {
+  return tasks.filter(e => isDateEqual(dateOption, e.createdAt));
+};
+
+export const isDateEqual = (date1: Date, date2: number | Date) => {
+  const d1 = new Date(date1);
+  const d2 = new Date(date2);
+
+  const [month1, day1, year1] = [d1.getMonth(), d1.getDate(), d1.getFullYear()];
+  const [month2, day2, year2] = [d2.getMonth(), d2.getDate(), d2.getFullYear()];
+
+  return year1 === year2 && month1 === month2 && day1 === day2;
 };
 
 export const requestCameraPermission = async () => {
