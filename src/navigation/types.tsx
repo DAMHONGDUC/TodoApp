@@ -23,6 +23,7 @@ export type MainStackNavigatorParamList = {
     categoryId?: string;
   };
   CameraScreen: undefined;
+  ImageViewScreen: undefined;
 };
 
 export type AuthenStackNavigatorParamList = {

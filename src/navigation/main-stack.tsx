@@ -5,6 +5,7 @@ import ListTasksScreen from 'screens/task-detail/list-tasks-screen';
 import {MainStackNavigatorParamList} from './types';
 import {TaskDetailScreen} from 'screens/task-detail/task-detail-screen';
 import CameraScreen from 'screens/camera/camera-screen';
+import ImageViewScreen from 'screens/camera/image-view-screen';
 
 const Stack = createNativeStackNavigator<MainStackNavigatorParamList>();
 
@@ -38,6 +39,14 @@ export default function MainStack() {
       <Stack.Screen
         name="CameraScreen"
         component={CameraScreen}
+        options={{
+          headerShadowVisible: false,
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="ImageViewScreen"
+        component={ImageViewScreen}
         options={{
           headerShadowVisible: false,
           headerShown: false,

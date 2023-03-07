@@ -65,12 +65,22 @@ export const converTimeStampToDateTime = (timeStamp: number) => {
   return dateConvert || '';
 };
 
+export const converMtimeToDateTime = (timeStamp: Date) => {
+  const date = new Date(timeStamp);
+
+  const dateConvert =
+    ('0' + date.getHours()).slice(-2) +
+    ':' +
+    ('0' + date.getMinutes()).slice(-2) +
+    ', ' +
+    date.toDateString();
+
+  return dateConvert || '';
+};
+
 const isToday = (inputDate: number) => {
   const today = new Date();
   const date = new Date(inputDate);
-
-  // console.log(today.toDateString());
-  // console.log(date.toDateString());
 
   if (today.toDateString() === date.toDateString()) {
     return true;
@@ -95,13 +105,8 @@ const isLastWeek = (inputDate: number) => {
   const lastWeek = new Date();
   lastWeek.setDate(lastWeek.getDate() - 7);
   const date = new Date(inputDate);
-  //const today = new Date();
 
-  //console.log(date, date.toDateString() < today.toDateString());
-  if (
-    date.toDateString() >= lastWeek.toDateString()
-    //&& date.toDateString() <= today.toDateString()
-  ) {
+  if (date.toDateString() >= lastWeek.toDateString()) {
     return true;
   }
 
@@ -122,7 +127,6 @@ export const filterData = (
       : tasks.filter(e => e.status === TaskFilterOption[taskOption]);
 
   // dateOption
-
   switch (DateFilterOption[dateOption]) {
     case DateFilterOption[0]:
       result = result.filter(e => isToday(e.createdAt));

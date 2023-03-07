@@ -1,3 +1,5 @@
+import RNFS from 'react-native-fs';
+
 export const USER_ID = 'USER_ID';
 
 export const TASK_DONE = 'Done';
@@ -30,3 +32,5 @@ export const CAMERA_NOT_DETERMINED = 'not-determined';
 export const CAMERA_DENIED = 'denied';
 
 export const CAMERA_PERMISSION = 'CAMERA_PERMISSION';
+
+export const IMAGE_PATH = RNFS.DocumentDirectoryPath + '/Images';
